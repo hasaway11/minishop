@@ -1,0 +1,17 @@
+AccountController (/api/accounts)
+- 1. 아이디 사용여부 확인
+- 2. 이메일을 전달받아 체크코드를 생성해 발송 (이메일, 체크코드는 세션에 저장)
+- 3. 아이디 찾기
+- 4. 비밀번호 리셋
+- 5. 아이디 확인
+
+MemberController (/api/members)
+- 6. 멤버회원 가입
+- 7. 내정보 보기
+- 8. 비밀번호 변경
+- 9. 프사 변경
+
+SellerController (/api/seller)
+- 10. 셀러회원 가입
+- 11. 셀러회원 정보 보기
+- 12. 정보 변경

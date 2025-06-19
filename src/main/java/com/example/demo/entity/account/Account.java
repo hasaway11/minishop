@@ -18,4 +18,8 @@ public abstract class Account {
   @Column(length=30)
   private String email;
   private LocalDateTime createdAt;
+
+  public void changePassword(String encodedPassword) {
+    this.password = encodedPassword;
+  }
 }
