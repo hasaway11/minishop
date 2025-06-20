@@ -72,7 +72,7 @@ public class AccountController {
 
   @PreAuthorize("isAuthenticated")
   @Operation(summary="비밀번호 확인", description="현재 접속 중인 사용자의 비밀번호를 재확인")
-  @GetMapping("/api/members/check-password")
+  @GetMapping("/api/account/check-password")
   public ResponseEntity<String> checkPassword(@RequestParam String password, Principal principal) {
     boolean result = service.checkPassword(password, principal.getName());
     if(result) return ResponseEntity.ok("비밀번호 확인 성공");

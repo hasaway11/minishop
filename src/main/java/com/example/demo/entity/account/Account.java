@@ -9,6 +9,8 @@ import java.time.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) // 또는 SINGLE_TABLE
 @DiscriminatorColumn(name = "account_type")
+@AllArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 public abstract class Account {
   @Id
   @Column(length=10)
@@ -17,7 +19,7 @@ public abstract class Account {
   private String password;
   @Column(length=30)
   private String email;
-  private LocalDateTime createdAt;
+  private LocalDate signupDate;
 
   public void changePassword(String encodedPassword) {
     this.password = encodedPassword;
