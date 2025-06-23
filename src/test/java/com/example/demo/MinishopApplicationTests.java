@@ -7,12 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class MinishopApplicationTests {
-	@Autowired
-	private AccountRepository accountDao;
 
 	@Test
 	void contextLoads() {
-		System.out.println(accountDao);
 	}
 
 }

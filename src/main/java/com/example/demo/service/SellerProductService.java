@@ -16,44 +16,40 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class SellerProductService {
-  private final ProductRepository productDao;
-  private final ProductMapper productMapper;
+  private final ProductMapper productDao;
   private final CategoryRepository categoryDao;
   private final int PAGE_SIZE = 12;
 
   @Transactional(readOnly=true)
   public PageResponse<ProductDto.Summary> findBySeller(int pageno, String seller) {
-    List<ProductDto.Summary> products = productMapper.findAllBySeller(pageno, PAGE_SIZE, seller);
-    int totalCount = productMapper.countBySeller(seller);
+    List<ProductDto.Summary> products = productDao.findAllBySeller(pageno, PAGE_SIZE, seller);
+    int totalCount = productDao.countBySeller(seller);
     return new PageResponse<>(products, pageno, PAGE_SIZE, totalCount);
   }
 
   public Product create(ProductDto.Create dto, String loginId) {
-    Category category = categoryDao.findById(dto.getCategory()).orElseThrow(()->new EntityNotFoundException("카테고리를 찾을 수 없습니다"));
-    Product product = dto.toEntity(category, new Seller(loginId));
+    Product product = dto.toEntity(loginId);
     return productDao.save(product);
   }
 
+  @Transactional(readOnly=true)
   public Product read(int pno, String loginId) {
     Product product = productDao.findById(pno).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
-    if(!product.getSeller().getUsername().equals(loginId))
-      throw new JobFailException("작업을 수행할 수 없습니다");
+    product.checkSellerOrThorw(loginId);
     return product;
   }
 
   @Transactional
   public void update(ProductDto.Update dto, String loginId) {
-    Product product = productDao.findById(dto.getPno()).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
-    if(!product.getSeller().getUsername().equals(loginId))
-      throw new JobFailException("작업을 수행할 수 없습니다");
-    product.changeFrom(dto);
+    Product product = productDao.findById(dto.getProductId()).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+    product.checkSellerOrThorw(loginId);
+    productDao.update(dto);
   }
 
   @Transactional
-  public void delete(int pno, String loginId) {
-    Product product = productDao.findById(pno).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
-    if(!product.getSeller().getUsername().equals(loginId))
-      throw new JobFailException("작업을 수행할 수 없습니다");
-    productDao.delete(product);
+  public void delete(int productId, String loginId) {
+    Product product = productDao.findById(productId).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+    product.checkSellerOrThorw(loginId);
+    productDao.delete(productId);
   }
 }

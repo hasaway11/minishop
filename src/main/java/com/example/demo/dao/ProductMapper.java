@@ -20,4 +20,11 @@ public interface ProductMapper {
 
   @Select("select * from product where pno=#{pno}")
   Optional<Product> findById(int pno);
+
+  Product save(Product product);
+
+  @Delete("delete from product where pno=#{pno}")
+  int delete(int pno);
+
+  int update(ProductDto.Update dto);
 }

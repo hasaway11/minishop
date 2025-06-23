@@ -17,6 +17,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
+  private final AccountMapper accountMapper;
   private final MemberMapper memberDao;
   private final PasswordEncoder passwordEncoder;
 
@@ -25,8 +26,10 @@ public class MemberService {
     FunctionUtil.initDefaultProfile();
   }
 
+  @Transactional
   public Member signup(MemberDto .Signup dto) {
     Member member = dto.toEntity(passwordEncoder);
+    accountMapper.save(member);
     return memberDao.save(member);
   }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.dao.mybatis.productMapper">
+<mapper namespace="com.example.demo.dao.productMapper">
   <select id="findAllBySeller" resultType="com.example.demo.dto.ProductDto$Summary">
 	select pno, seller, name, price, image, sales_volume, review_count, total_stars/review_count as star from product
     where seller=#{seller} order by pno desc
@@ -12,4 +12,14 @@
 	order by pno desc
 	offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>
+
+  <update id="update">
+    update product
+    <trim suffixOverrides="," prefix="set">
+      <if test="dto.info!=null">info=#{dto.info},</if>
+      <if test="dto.price!=null">price=#{dto.price},</if>
+      <if test="dto.stock!=null">stock=#{dto.stock},</if>
+    </trim>
+    where pno=#{dto.pno}
+  </update>
 </mapper>

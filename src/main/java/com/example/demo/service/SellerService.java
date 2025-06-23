@@ -8,6 +8,7 @@ import com.example.demo.exception.*;
 import lombok.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
 @RequiredArgsConstructor
 @Service
@@ -16,6 +17,7 @@ public class SellerService {
   private final SellerMapper sellerDao;
   private final PasswordEncoder passwordEncoder;
 
+  @Transactional
   public Seller signup(SellerDto.Signup dto) {
     Seller seller = dto.toEntity(passwordEncoder);
     accountDao.save(seller);

@@ -1,8 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.dao.jpa.*;
+import com.example.demo.dao.*;
 import com.example.demo.dto.*;
-import com.example.demo.dto.jpa.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
@@ -12,11 +11,11 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class CartService {
-  private final CartRepository cartDao;
+  private final CartMapper cartDao;
 
   public CartDto.Carts read(String loginId) {
-    List<CartItemSummary> cartItems = cartDao.findCartItemSummaries(loginId);
-    int cartTotalPrice = cartItems.stream().mapToInt(CartItemSummary::getTotalPrice).sum();
+    List<CartDto.Summary> cartItems = cartDao.findCartItemByUsername(loginId);
+    int cartTotalPrice = cartItems.stream().mapToInt(CartDto.Summary::getTotalPrice).sum();
     return new CartDto.Carts(cartItems, cartTotalPrice);
   }
 

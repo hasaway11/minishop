@@ -1,6 +1,8 @@
 drop table account;
 drop table member;
 drop table seller;
+drop table product;
+drop sequence product_seq;
 
 create table account (
    username varchar2(10 char),
@@ -28,3 +30,20 @@ create table seller (
    sales_amount number(10),
    constraint account_pk_username primary key(username)
 );
+
+create table product (
+    pno number(6),
+    name varchar2(10 char),
+    info clob,
+    image varchar2(10 char),
+    price number(7),
+    sales_volume number(5),
+    sales_amout number(10),
+    total_star number(6),
+    review_count number(5),
+    stock number(3),
+    category number(3),
+    constraint product_pk_pno primary key(pno)
+);
+
+create sequence product_seq;

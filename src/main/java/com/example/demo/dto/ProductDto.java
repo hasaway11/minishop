@@ -1,13 +1,10 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.account.*;
 import com.example.demo.entity.product.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.web.multipart.*;
-
-import java.util.*;
 
 @NoArgsConstructor(access = AccessLevel. PRIVATE)
 public class ProductDto {
@@ -24,17 +21,17 @@ public class ProductDto {
     private Integer stock;
     @NotNull
     private Integer category;
-    private List<MultipartFile> images;
+    private MultipartFile image;
 
-    public Product toEntity(Category category, Seller seller) {
-      return new Product(0, name, info, "hello", price, 0, 0, 0, 0, stock, category, seller);
+    public Product toEntity(String seller) {
+      return new Product(0, seller, name, info, null, price, 0, 0, 0, 0, stock, category);
     }
   }
 
   @Data
   public static class Update {
     @NotNull
-    private Integer pno;
+    private Integer productId;
     @NotEmpty
     private String info;
     @NotNull
@@ -45,7 +42,7 @@ public class ProductDto {
 
   @Data
   public static class Summary {
-    private Integer pno;
+    private Integer productId;
     private String seller;
     private String name;
     private String image;
@@ -57,7 +54,7 @@ public class ProductDto {
   @AllArgsConstructor
   @Data
   public static class Read {
-    private Integer pno;
+    private Integer productId;
     @Column(length=20)
     private String name;
     @Lob
