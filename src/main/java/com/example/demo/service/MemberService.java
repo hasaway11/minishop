@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.*;
 import com.example.demo.dao.jpa.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.account.*;
@@ -16,7 +17,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-  private final MemberRepository memberDao;
+  private final MemberMapper memberDao;
   private final PasswordEncoder passwordEncoder;
 
   @PostConstruct
@@ -34,15 +35,8 @@ public class MemberService {
     return memberDao.findById(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다")).toRead();
   }
 
-  public boolean changePassword(MemberDto.PasswordChange dto, String loginId) {
-    String encodedPassword = memberDao.findPasswordByUsername(loginId);
-    if(!passwordEncoder.matches(dto.getCurrentPassword(), encodedPassword))
-      return false;
-    return memberDao.updatePassword(loginId, passwordEncoder.encode(dto.getNewPassword()))==1;
-  }
-
   public boolean changeProfile(MemberDto.changeProfile dto, String loginId) {
     Optional<String> result = FunctionUtil.getProfile(dto.getProfile(), true);
-    return result.filter(s -> memberDao.updateProfile(s, loginId) == 1).isPresent();
+    return result.filter(newProfile -> memberDao.updateProfile(newProfile, loginId) == 1).isPresent();
   }
 }

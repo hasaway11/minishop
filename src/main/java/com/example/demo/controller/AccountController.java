@@ -63,11 +63,20 @@ public class AccountController {
 
   @PreAuthorize("isAnonymous()")
   @Operation(summary="임시비밀번호 발급", description="아이디로 임시비밀번호를 발급")
-  @PutMapping("/api/account/password")
+  @PostMapping("/api/account/password/reset")
   public ResponseEntity<String> resetPassword(@ModelAttribute @Valid AccountDto.ResetPassword dto, BindingResult br) {
     boolean result = service.resetPassword(dto);
     if(result) return ResponseEntity.ok("임시비밀번호를 이메일로 보냈습니다");
     return ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다");
+  }
+
+  // 비번 변경
+  @PreAuthorize("isAuthenticated()")
+  @Operation(summary = "비밀번호 변경", description = "기존 비밀번호, 새 비밀번호로 비밀번호 변경")
+  @PutMapping("/api/account/password")
+  public ResponseEntity<String> changePassword(@ModelAttribute @Valid MemberDto.PasswordChange dto, BindingResult br, Principal principal) {
+    boolean result = service.changePassword(dto, principal.getName());
+    return result? ResponseEntity.ok(null):ResponseEntity.status(409).body(null);
   }
 
   @PreAuthorize("isAuthenticated")

@@ -16,15 +16,15 @@ public class Category {
   private String name;
 
   @ManyToOne
-  @JoinColumn(name="parent_id")
+  @JoinColumn(name="pno")
   private Category parent;
 
   // 하위 카테고리들
-  @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy="pno", cascade=CascadeType.ALL, orphanRemoval=true)
   private List<Category> children = new ArrayList<>();
 
   // 이 카테고리에 속한 상품들
-  @OneToMany(mappedBy = "category")
+  @OneToMany(mappedBy="category")
   private List<Product> products = new ArrayList<>();
 
   public Category(String name) {

@@ -36,14 +36,7 @@ public class MemberController {
     return ResponseEntity.ok(dto);
   }
 
-  // 비번 변경
-  @PreAuthorize("isAuthenticated()")
-  @Operation(summary = "비밀번호 변경", description = "기존 비밀번호, 새 비밀번호로 비밀번호 변경")
-  @PutMapping("/api/member/password")
-  public ResponseEntity<String> changePassword(@ModelAttribute @Valid MemberDto.PasswordChange dto, BindingResult br, Principal principal) {
-    boolean result = service.changePassword(dto, principal.getName());
-    return result? ResponseEntity.ok(null):ResponseEntity.status(409).body(null);
-  }
+
 
   // 프사 변경
   @PreAuthorize("isAuthenticated()")

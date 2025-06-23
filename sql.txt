@@ -1,0 +1,30 @@
+drop table account;
+drop table member;
+drop table seller;
+
+create table account (
+   username varchar2(10 char),
+   password varchar2(60 char),
+   email varchar2(30 char),
+   signup_date date ,
+   constraint account_pk_username primary key(username)
+);
+
+create table member (
+   username varchar2(10 char),
+   birth_date date,
+   profile clob,
+   member_level varchar2(10 char)
+   constraint account_pk_username primary key(username)
+);
+
+create table seller (
+   username varchar2(10 char),
+   company_name varchar2(20 char),
+   representative varchar2(10 char),
+   address varchar2(50 char),
+   seller_level varchar2(10 char),
+   sales_count number(5),
+   sales_amount number(10),
+   constraint account_pk_username primary key(username)
+);

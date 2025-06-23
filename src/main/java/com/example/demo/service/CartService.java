@@ -5,6 +5,7 @@ import com.example.demo.dto.*;
 import com.example.demo.dto.jpa.*;
 import lombok.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
 import java.util.*;
 
@@ -18,4 +19,10 @@ public class CartService {
     int cartTotalPrice = cartItems.stream().mapToInt(CartItemSummary::getTotalPrice).sum();
     return new CartDto.Carts(cartItems, cartTotalPrice);
   }
+
+  @Transactional
+  public boolean addToCart(Integer pno, String loginId) {
+    return false;
+  }
+
 }

@@ -1,15 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.*;
 import com.example.demo.dao.jpa.*;
-import com.example.demo.dao.mybatis.*;
 import com.example.demo.dto.*;
-import com.example.demo.dto.jpa.*;
 import com.example.demo.entity.account.*;
 import com.example.demo.entity.product.*;
 import com.example.demo.exception.*;
 
 import lombok.*;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 

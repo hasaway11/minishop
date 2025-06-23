@@ -1,30 +1,17 @@
 package com.example.demo.entity.account;
 
 import com.example.demo.dto.*;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.*;
 
 import java.time.*;
 import java.time.temporal.*;
 
-@Entity
-@DiscriminatorValue("SELLER")
-@NoArgsConstructor
 public class Seller extends Account {
   private static final int MIN_COUNT_FOR_PLATINUM = 30;
   private static final int MIN_COUNT_FOR_PREMIUM = 50;
 
-  @Comment("회사 이름")
-  @Column(length=30)
   private String companyName;
-  @Comment("대표자 이름")
-  @Column(length=10)
   private String representative;
-  @Comment("소재지")
-  @Column(length=50)
   private String address;
-  @Enumerated(value=EnumType.ORDINAL)
   private SellerLevel sellerLevel = SellerLevel.POWER;
   private Integer salesCount;
   private Integer salesAmount;

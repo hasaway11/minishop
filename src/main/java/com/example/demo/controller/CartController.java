@@ -20,7 +20,9 @@ public class CartController {
     return ResponseEntity.ok(service.read(principal.getName()));
   }
 
-  public ResponseEntity<CartDto.Carts> addToCart(int pno, Principal principal) {
-    return null;
+  @PostMapping("/carts/{pno}")
+  public ResponseEntity<CartDto.Carts> addToCart(@PathVariable int pno, Principal principal) {
+    service.addToCart(pno, principal.getName());
+    return ResponseEntity.ok(null);
   }
 }
