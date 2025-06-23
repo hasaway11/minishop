@@ -8,6 +8,6 @@ import java.io.*;
 @Embeddable
 @EqualsAndHashCode
 public class CartItemId implements Serializable {
-  private String memberUsername;
-  private Long productId;
+  private String username;
+  private Integer pno;
 }

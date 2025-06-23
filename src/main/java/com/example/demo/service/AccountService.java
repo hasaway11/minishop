@@ -1,13 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.dao.*;
+import com.example.demo.dao.jpa.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.account.*;
 import com.example.demo.exception.*;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
-import jakarta.validation.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
 import org.apache.commons.lang3.*;
 import org.springframework.mail.javamail.*;
@@ -15,7 +13,6 @@ import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.*;
 
-import java.beans.*;
 import java.util.*;
 
 @RequiredArgsConstructor

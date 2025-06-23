@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
-import com.example.demo.dao.*;
+import com.example.demo.dao.jpa.*;
+import com.example.demo.dto.*;
 import com.example.demo.entity.account.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.*;
@@ -17,6 +18,6 @@ public class CustomUserDetailsService implements UserDetailsService  {
     String role = "MEMBER";
     if(account instanceof Seller)
       role = "SELLER";
-    return User.builder().username(username).password(account.getPassword()).roles(role).build();
+    return new CustomUserDetails(account.getUsername(), account.getPassword(), role);
   }
 }

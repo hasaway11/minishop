@@ -2,6 +2,7 @@ package com.example.demo.entity.account;
 
 import com.example.demo.dto.*;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.*;
 
 import java.time.*;
@@ -9,6 +10,7 @@ import java.time.temporal.*;
 
 @Entity
 @DiscriminatorValue("SELLER")
+@NoArgsConstructor
 public class Seller extends Account {
   private static final int MIN_COUNT_FOR_PLATINUM = 30;
   private static final int MIN_COUNT_FOR_PREMIUM = 50;
@@ -35,6 +37,10 @@ public class Seller extends Account {
     this.sellerLevel = SellerLevel.POWER;
     this.salesCount = 0;
     this.salesAmount = 0;
+  }
+
+  public Seller(String username) {
+    super(username);
   }
 
   public SellerDto.Read toRead() {

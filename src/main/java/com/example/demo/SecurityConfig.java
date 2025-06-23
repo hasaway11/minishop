@@ -1,9 +1,11 @@
 package com.example.demo;
 
+import com.example.demo.security.filter.*;
 import lombok.*;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.method.configuration.*;
 import org.springframework.security.config.annotation.web.builders.*;
+import org.springframework.security.config.http.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.security.web.*;
 import org.springframework.security.web.access.*;
@@ -28,9 +30,11 @@ public class SecurityConfig {
   SecurityFilterChain securityFilterChain(HttpSecurity config) throws Exception {
     config.cors(cors->cors.configurationSource(corsConfigurationSource()));
     config.csrf(csrf-> csrf.disable());
+    config.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     config.formLogin(form->form.loginPage("/login").loginProcessingUrl("/login").successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler));
     config.logout(logout-> logout.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler));
     config.exceptionHandling(handler->handler.accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(authenticationEntryPoint));
+    config.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     return config.build();
   }
 

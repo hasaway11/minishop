@@ -21,6 +21,10 @@ public abstract class Account {
   private String email;
   private LocalDate signupDate;
 
+  public Account(String username) {
+    this.username = username;
+  }
+
   public void changePassword(String encodedPassword) {
     this.password = encodedPassword;
   }

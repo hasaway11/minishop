@@ -16,7 +16,6 @@ SellerController (/api/seller)
 - 11. 셀러회원 정보 보기
 - 12. 회원등급 변경
 
-
 ProductController(/api/product)
 - 13. 상품 추가
 - 14. 상품 목록
