@@ -11,8 +11,4 @@ public class Category {
   private Integer categoryId;
   private String name;
   private Integer parent;
-
-  public Category(String name) {
-    this.name = name;
-  }
 }

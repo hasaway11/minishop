@@ -8,6 +8,9 @@ import java.time.*;
 import java.util.*;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Order {
   private Integer orderId;
   private String username;

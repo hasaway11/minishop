@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
-import com.example.demo.dto.jpa.*;
 import com.example.demo.entity.product.*;
 import com.example.demo.service.*;
 import jakarta.validation.*;
+import lombok.*;
 import org.springframework.http.*;
 import org.springframework.security.access.annotation.*;
 import org.springframework.validation.*;
@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.security.*;
 
 @Secured(("ROLE_SELLER"))
+@RequiredArgsConstructor
 @Validated
 @RestController
 public class SellerProductController {
-  private SellerProductService service;
+  private final SellerProductService service;
 
   @PostMapping("/api/seller/products/new")
   public ResponseEntity<?> create(@ModelAttribute @Valid ProductDto.Create dto, BindingResult br, Principal principal) {
@@ -31,20 +32,20 @@ public class SellerProductController {
     return ResponseEntity.ok(products);
   }
 
-  @GetMapping("/api/seller/products/{pno}")
-  public ResponseEntity<Product> read(@PathVariable int pno, Principal principal) {
-    return ResponseEntity.ok(service.read(pno, principal.getName()));
+  @GetMapping("/api/seller/products/{productId}")
+  public ResponseEntity<Product> read(@PathVariable int productId, Principal principal) {
+    return ResponseEntity.ok(service.read(productId, principal.getName()));
   }
 
-  @PutMapping("/api/seller/products/{pno}")
+  @PutMapping("/api/seller/products/{productId}")
   public ResponseEntity<Void> update(@ModelAttribute @Valid ProductDto.Update dto, BindingResult br, Principal principal) {
     service.update(dto, principal.getName());
     return ResponseEntity.ok(null);
   }
 
-  @DeleteMapping("/api/seller/products/{pno}")
-  public ResponseEntity<?> delete(@PathVariable int pno, Principal principal) {
-    service.delete(pno, principal.getName());
+  @DeleteMapping("/api/seller/products/{productId}")
+  public ResponseEntity<Void> delete(@PathVariable int productId, Principal principal) {
+    service.delete(productId, principal.getName());
     return ResponseEntity.ok(null);
   }
 }

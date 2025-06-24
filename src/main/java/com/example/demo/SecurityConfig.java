@@ -30,7 +30,6 @@ public class SecurityConfig {
   SecurityFilterChain securityFilterChain(HttpSecurity config) throws Exception {
     config.cors(cors->cors.configurationSource(corsConfigurationSource()));
     config.csrf(csrf-> csrf.disable());
-    config.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     config.formLogin(form->form.loginPage("/login").loginProcessingUrl("/login").successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler));
     config.logout(logout-> logout.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler));
     config.exceptionHandling(handler->handler.accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(authenticationEntryPoint));

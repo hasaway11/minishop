@@ -17,7 +17,6 @@
     update product
     <trim suffixOverrides="," prefix="set">
       <if test="dto.info!=null">info=#{dto.info},</if>
-      <if test="dto.price!=null">price=#{dto.price},</if>
       <if test="dto.stock!=null">stock=#{dto.stock},</if>
     </trim>
     where pno=#{dto.pno}

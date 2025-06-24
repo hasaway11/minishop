@@ -1,7 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.dto.jpa.*;
-import com.example.demo.entity.order.*;
 import lombok.*;
 
 import java.util.*;
@@ -22,5 +20,10 @@ public class CartDto {
   public static class Carts {
     private List<Summary> items;
     private int cartTotalPrice;
+  }
+
+  @Data
+  public static class Delete {
+    private List<Integer> ids;
   }
 }

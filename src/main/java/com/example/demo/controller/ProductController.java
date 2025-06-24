@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
-import com.example.demo.dto.jpa.*;
 import com.example.demo.service.*;
 import lombok.*;
 import org.springframework.http.*;
@@ -17,8 +16,8 @@ public class ProductController {
   private final ProductService service;
 
   @GetMapping("/api/products")
-  public ResponseEntity<PageResponse<ProductSummary>> findSummaries(@RequestParam(defaultValue="1") int pageno) {
-    PageResponse<ProductSummary> products = service.findSummaries(pageno);
+  public ResponseEntity<PageResponse<ProductDto.Summary>> findSummaries(@RequestParam(defaultValue="1") int pageno) {
+    PageResponse<ProductDto.Summary> products = service.findSummaries(pageno);
     return ResponseEntity.ok(products);
   }
 

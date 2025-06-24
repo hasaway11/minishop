@@ -1,11 +1,11 @@
 package com.example.demo.entity.order;
 
-import com.example.demo.dto.*;
-import com.example.demo.entity.product.*;
-import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CartItem {
   private Integer cartItemId;
   private String username;

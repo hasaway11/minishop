@@ -28,7 +28,7 @@ public class AccountController {
   public ResponseEntity<Map<String, String>> checkLogin(Authentication authentication, HttpSession session) {
     if (authentication != null && authentication.isAuthenticated()) {
       String username = authentication.getName();
-      String role = authentication.getAuthorities().stream().map(a->a.getAuthority()).findFirst().orElse("");
+      String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().orElse("");
       return ResponseEntity.ok(Map.of("username", username,"role", role));
     }
     return ResponseEntity.status(HttpStatus.CONFLICT).body(null);

@@ -20,7 +20,6 @@ public class FunctionUtil {
         cachedBase64Profile = "data:" + MediaType.IMAGE_JPEG_VALUE + ";base64," + Base64.getEncoder().encodeToString(fileBytes);
       }
     } catch (IOException e) {
-      System.err.println("[ERROR] 기본 프로필 이미지 로딩 실패");
       e.printStackTrace();
       cachedBase64Profile = null;
     }
@@ -34,12 +33,12 @@ public class FunctionUtil {
     try {
       byte[] fileBytes = file.getBytes();
       String result = "data:" + file.getContentType() + ";base64," + Base64.getEncoder().encodeToString(fileBytes);
-      return Optional.ofNullable(result);
+      return Optional.of(result);
     } catch(IOException e) {
       e.printStackTrace();
     }
     if(!isUpdate)
       return Optional.ofNullable(cachedBase64Profile);
-    return Optional.ofNullable(null);
+    return Optional.empty();
   }
 }

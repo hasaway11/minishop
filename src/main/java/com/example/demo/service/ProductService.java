@@ -17,9 +17,9 @@ public class ProductService {
   private final int PAGE_SIZE = 12;
 
   @Transactional(readOnly=true)
-  public PageResponse<ProductDto.Summary> findSummaries(int pageno, String seller) {
-    List<ProductDto.Summary> products = productMapper.findAllBySeller(pageno, PAGE_SIZE, seller);
-    int totalCount = productMapper.countBySeller(seller);
+  public PageResponse<ProductDto.Summary> findSummaries(int pageno) {
+    List<ProductDto.Summary> products = productMapper.findAll(pageno, PAGE_SIZE);
+    int totalCount = productMapper.count();
     return new PageResponse<>(products, pageno, PAGE_SIZE, totalCount);
   }
 

@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.*;
-import com.example.demo.dao.jpa.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.account.*;
 import com.example.demo.exception.*;

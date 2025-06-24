@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.CategoryDao">
+  <resultMap type="com.example.demo.dto.CategoryDto" id="mapForChild">
+	<id property="caterogyId" column="cid" />
+	<result property="name" column="cname" />
+  </resultMap>
+
+  <resultMap type="com.example.demo.dto.CategoryDto" id="mapForParent">
+	<id property="caterogyId" column="pid" />
+	<result property="name" column="pname" />
+	<collection property="children" javaType="java.util.ArrayList" resultMap="mapForChild" />
+  </resultMap>
+
+  <resultMap type="com.example.demo.dto.CategoryDto" id="mapForFindAll">
+	<id property="caterogyId" column="gid" />
+	<result property="name" column="gname" />
+	<collection property="children" javaType="java.util.ArrayList" resultMap="mapForParent" />
+  </resultMap>
+
+  <select id="findAll" resultMap="mapForFindAll">
+    <![CDATA[
+	  select g.caterogyId gid, g.name gname, p.caterogyId pid, p.name pname, c.caterogyId cid, c.name cname from category g
+	  left outer join category p on p.parent=g.cid
+	  left outer join category c on c.parent=p.cid where g.parent is null
+    ]]>
+  </select>
+</mapper>

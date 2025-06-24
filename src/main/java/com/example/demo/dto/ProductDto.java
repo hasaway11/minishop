@@ -21,7 +21,6 @@ public class ProductDto {
     private Integer stock;
     @NotNull
     private Integer category;
-    private MultipartFile image;
 
     public Product toEntity(String seller) {
       return new Product(0, seller, name, info, null, price, 0, 0, 0, 0, stock, category);
@@ -34,8 +33,6 @@ public class ProductDto {
     private Integer productId;
     @NotEmpty
     private String info;
-    @NotNull
-    private Integer price;
     @NotNull
     private Integer stock;
   }

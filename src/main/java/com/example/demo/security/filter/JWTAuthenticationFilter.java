@@ -21,7 +21,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 		if(request.getMethod().equals("OPTIONS"))
 			return true;
 		String path = request.getRequestURI();
-		return whitelist.stream().anyMatch(url->path.startsWith(url));
+		return whitelist.stream().anyMatch(path::startsWith);
 	}
 	
 	@Override

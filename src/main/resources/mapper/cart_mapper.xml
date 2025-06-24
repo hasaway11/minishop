@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.CartDao">
+  <delete id="delete">
+    delete from cart where cart_item_id in
+	<foreach collection="list" item="item" open="(" close=")" separator=",">
+      #{item}
+	</foreach>
+	and username=#{username}
+  </delete>
+
+  <select id="findSelectedCartItems" resultType="com.example.demo.dto.CartDto$Summary">
+    select c.product_id, c.name, c.quantity, c.quantity*p.price, p.image  from cartitem c join product p where c.username=#{username} and cart_item_in in
+    <foreach collection="list" item="item" open="(" close=")" separator=",">
+      #{item}
+	</foreach>
+  </select>
+</mapper>

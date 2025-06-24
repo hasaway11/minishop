@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.*;
-import com.example.demo.dao.jpa.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.account.*;
 import com.example.demo.exception.*;
@@ -27,7 +26,7 @@ public class MemberService {
   }
 
   @Transactional
-  public Member signup(MemberDto .Signup dto) {
+  public Member signup(MemberDto.Signup dto) {
     Member member = dto.toEntity(passwordEncoder);
     accountMapper.save(member);
     return memberDao.save(member);

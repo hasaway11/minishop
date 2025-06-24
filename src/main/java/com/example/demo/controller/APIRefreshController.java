@@ -20,13 +20,13 @@ public class APIRefreshController {
 		String accessToken = authHeader.substring(7);
 		
 		// Access 토큰이 만료되지 않았다면
-		if (checkExpiredToken(accessToken) == false) 
+		if (!checkExpiredToken(accessToken))
 			return ResponseEntity.ok(Map.of("accessToken", accessToken, "refreshToken", refreshToken));
 
 		// Refresh토큰 검증
 		Map<String,Object> claims = JWTUtil.validateToken(refreshToken);
 		String newAccessToken = JWTUtil.generateToken(claims, 10);
-		String newRefreshToken = checkTime((Integer) claims.get("exp")) == true ? JWTUtil.generateToken(claims, 60 * 24) : refreshToken;
+		String newRefreshToken = checkTime((Integer) claims.get("exp")) ? JWTUtil.generateToken(claims, 60 * 24) : refreshToken;
 		return ResponseEntity.ok(Map.of("accessToken", newAccessToken, "refreshToken", newRefreshToken));
 	}
 
