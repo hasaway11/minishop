@@ -7,6 +7,7 @@ import lombok.*;
 import java.time.*;
 import java.time.temporal.*;
 
+@Getter
 public class Member extends Account {
   private LocalDate birthDate;
   @Setter private String profile;
@@ -21,6 +22,6 @@ public class Member extends Account {
 
   public MemberDto.Read toRead() {
     long days = ChronoUnit.DAYS.between(getSignupDate(), LocalDate.now());
-    return new MemberDto.Read(getUsername(), getEmail(), profile, getSignupDate(), birthDate, days, memberLevel);
+    return new MemberDto.Read(getUsername(), getEmail(), profile, getSignupDate(), birthDate, days, memberLevel.getLabel());
   }
 }

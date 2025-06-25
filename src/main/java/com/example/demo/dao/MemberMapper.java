@@ -8,7 +8,7 @@ import java.util.*;
 @Mapper
 public interface MemberMapper {
   @Insert("insert into member values(#{username}, #{birthDate}, #{profile}, #{memberLevel})")
-  Member save(Member member);
+  int save(Member member);
 
   @Select("select a.*, m.* from account a join member m on a.username=m.username where m.username=#{username}")
   Optional<Member> findById(String username);

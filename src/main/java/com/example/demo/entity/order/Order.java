@@ -11,7 +11,9 @@ import java.time.*;
 public class Order {
   private Integer orderId;
   private String username;
-  private LocalDateTime orderDate;
+  private LocalDateTime orderAt;
+  private LocalDateTime paidAt;
+  private LocalDateTime cancelAt;
   private String deliveryAddress;
   private OrderStatus status;
   private Integer orderTotalPrice;

@@ -25,17 +25,23 @@ public class OrderDto {
   @Data
   public static class Orders {
     private Integer orderId;
-    private LocalDateTime orderDate;
+    private LocalDateTime displayTime;
     private OrderStatus status;
     private Integer orderTotalPrice;
     private List<OrderDto.Item> orderItems;
 
     public Orders(Order order, List<OrderDto.Item> orderItems) {
       this.orderId = order.getOrderId();
-      this.orderDate = order.getOrderDate();
       this.status = order.getStatus();
       this.orderTotalPrice = order.getOrderTotalPrice();
       this.orderItems = orderItems;
+
+      if(this.status==OrderStatus.CREATE)
+        this.displayTime = order.getOrderAt();
+      else if(this.status==OrderStatus.CANCEL)
+        this.displayTime = order.getCancelAt();
+      else
+        this.displayTime = order.getPaidAt();
     }
   }
 }

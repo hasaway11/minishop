@@ -24,7 +24,7 @@ public class MemberController {
   @PreAuthorize("isAnonymous()")
   @Operation(summary= "일반회원 가입", description="일반회원 가입 및 프로필 사진 업로드")
   @PostMapping("/api/member/new")
-  public ResponseEntity<Member> signup(MemberDto.Signup dto, BindingResult br) {
+  public ResponseEntity<Member> signup(@Valid MemberDto.Signup dto, BindingResult br) {
     return ResponseEntity.ok(service.signup(dto));
   }
 
@@ -35,8 +35,6 @@ public class MemberController {
     MemberDto.Read dto = service.read(principal.getName());
     return ResponseEntity.ok(dto);
   }
-
-
 
   // 프사 변경
   @PreAuthorize("isAuthenticated()")

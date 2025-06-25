@@ -5,14 +5,16 @@ import jakarta.validation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.*;
+
 @RestControllerAdvice
 public class ProcessingFaultAdvice {
   // 500 : 처리 중 오류. 정말 다양한 이유로 발생
 
   // 검증 실패에 대한 예외처리
   @ExceptionHandler(ConstraintViolationException.class)
-  public ResponseEntity<String> constraintViolationException() {
-    return ResponseEntity.status(HttpStatus.CONFLICT).body("잘못된 입력 형식");
+  public ResponseEntity<String> constraintViolationException(ConstraintViolationException e) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage().split(":")[1]);
   }
 
   // 사용자 정의 : 엔티티 클래스(회원,글,댓글)가 없을 때
@@ -30,5 +32,10 @@ public class ProcessingFaultAdvice {
   @ExceptionHandler(OutOfStockException.class)
   public ResponseEntity<String> outOfStockException() {
     return ResponseEntity.status(HttpStatus.CONFLICT).body("재고가 부족합니다");
+  }
+
+  @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+  public ResponseEntity<String> sqlIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
   }
 }

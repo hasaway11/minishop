@@ -17,24 +17,26 @@ import java.time.*;
 public class SellerDto {
   @Data
   public static class Signup {
-    @NotEmpty
-    @Pattern(regexp="^[a-z0-9]{6,10}$")
+    @NotEmpty(message="아이디는 필수입력입니다")
+    @Pattern(regexp="^[a-z0-9]{6,10}$", message="아이디는 소문자와 숫자 6~10자입니다")
     private String username;
-    @NotEmpty
-    @Pattern(regexp="^[a-zA-Z0-9]{6,10}$")
+    @NotEmpty(message="비밀번호는 필수입력입니다")
+    @Pattern(regexp="^[a-zA-Z0-9]{6,10}$", message="비밀번호는 영숫자 6~10자입니다")
     private String password;
-    @NotEmpty
-    @Email
+    @NotEmpty(message="이메일은 필수입력입니다")
+    @Email(message="잘못된 이메일입니다")
     private String email;
-    @NotNull
     private LocalDate signupDate;
-    @NotEmpty
+    @NotEmpty(message="회사명은 필수입력입니다")
     private String companyName;
-    @NotEmpty
+    @NotEmpty(message="대표자 이름은 필수입력입니다")
     private String representative;
-    @NotEmpty
+    @NotEmpty(message="회사 주소는 필수입력입니다")
     private String address;
     private SellerLevel sellerLevel;
+    @NotEmpty(message="확인코드는 필수입력입니다")
+    @Pattern(regexp="^[a-zA-Z0-9]{10}$", message="확인코드는 영숫자 10자입니다")
+    private String code;
 
     public Seller toEntity(PasswordEncoder passwordEncoder) {
       String encodedPassword = passwordEncoder.encode(password);
@@ -53,7 +55,7 @@ public class SellerDto {
     private long days;
     private String representative;
     private String address;
-    private SellerLevel level;
+    private String level;
     private Integer salesCount;
     private Integer salesAmount;
   }

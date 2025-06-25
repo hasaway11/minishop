@@ -4,6 +4,7 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.account.*;
 import com.example.demo.service.*;
 import io.swagger.v3.oas.annotations.*;
+import jakarta.validation.*;
 import lombok.*;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
@@ -22,7 +23,7 @@ public class SellerController {
   @PreAuthorize("isAnonymous()")
   @Operation(summary= "셀러회원 가입", description="셀러회원 가입")
   @PostMapping("/api/seller/new")
-  public ResponseEntity<Seller> signup(SellerDto.Signup dto, BindingResult br) {
+  public ResponseEntity<Seller> signup(@Valid SellerDto.Signup dto, BindingResult br) {
     return ResponseEntity.ok(service.signup(dto));
   }
 

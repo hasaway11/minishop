@@ -20,7 +20,7 @@ public class OrderService {
   public int prepareOrder(List<Integer> selectedCartItemIds, String loginId) {
     List<CartDto.Summary> cartSummaries = cartDao.findSelectedCartItems(selectedCartItemIds, loginId);
     int orderTotalPrice = cartSummaries.stream().mapToInt(CartDto.Summary::getTotalPrice).sum();
-    Order order = Order.builder().username(loginId).orderDate(LocalDateTime.now()).status(OrderStatus.CREATE).orderTotalPrice(orderTotalPrice).build();
+    Order order = Order.builder().username(loginId).orderAt(LocalDateTime.now()).status(OrderStatus.CREATE).orderTotalPrice(orderTotalPrice).build();
     orderDao.save(order);
     List<OrderItem> orderItems = new ArrayList<>();
     int orderItemId = 1;

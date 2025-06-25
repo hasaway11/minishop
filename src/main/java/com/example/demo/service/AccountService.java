@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.*;
 
+import java.time.*;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ import java.util.*;
 public class AccountService {
   private final AccountMapper accountDao;
   private final JavaMailSender mailSender;
+  private final EmailVerificationMapper emailVerificationDao;
   private final PasswordEncoder passwordEncoder;
 
   private void sendMail(String from, String to, String title, String text) {
@@ -41,10 +43,12 @@ public class AccountService {
     return !accountDao.existsById(dto.getUsername());
   }
 
-  public String sendVerificationCode(String email) {
+  public void sendVerificationCode(String email) {
     String checkCode = RandomStringUtils.secure().nextAlphanumeric(10);
     sendMail("admin@minishop.co.kr", email, "확인코드", checkCode);
-    return checkCode;
+    LocalDateTime sendAt = LocalDateTime.now();
+    LocalDateTime expiresAt = sendAt.plusDays(1);
+    emailVerificationDao.save(email, checkCode, sendAt, expiresAt);
   }
 
   @Transactional(readOnly=true)
@@ -53,7 +57,7 @@ public class AccountService {
   }
 
   @Transactional
-  public boolean resetPassword(AccountDto.ResetPassword dto) {
+  public boolean resetPassword(AccountDto.PasswordReset dto) {
     Account account = accountDao.findById(dto.getUsername()).orElse(null);
     if(account == null)
       return false;
@@ -71,7 +75,7 @@ public class AccountService {
     return (passwordEncoder.matches(password, encodedPassword));
   }
 
-  public boolean changePassword(MemberDto.PasswordChange dto, String loginId) {
+  public boolean changePassword(AccountDto.PasswordChange dto, String loginId) {
     String encodedPassword = accountDao.findPasswordByUsername(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다"));
     if(!passwordEncoder.matches(dto.getCurrentPassword(), encodedPassword))
       return false;

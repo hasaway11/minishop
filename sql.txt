@@ -20,6 +20,14 @@ create table account (
    constraint account_pk_username primary key(username)
 );
 
+create table email_verification (
+    email varchar2(30 char),
+    code varchar2(10 char),
+    send_at date,
+    exprires_at date,
+    constraint email_verification_pk primary key(email)
+);
+
 create table member (
    username varchar2(10 char),
    birth_date date,
@@ -77,9 +85,9 @@ create table orders (
   order_id number(7),
   username varchar2(10 char),
   address varchar2(50 char),
-  order_date date,
-  paid_date date,
-  cancel_date date,
+  order_at date,
+  paid_at date,
+  cancel_at date,
   status varchar2(10 char),
   order_total_price number(10),
   constraint order_pk primary key(order_id)

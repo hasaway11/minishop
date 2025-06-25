@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.*;
+import java.time.*;
 import java.util.*;
 
 @Validated
@@ -23,16 +24,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AccountController {
   private final AccountService service;
-
-  @GetMapping(path = "/api/account/auth")
-  public ResponseEntity<Map<String, String>> checkLogin(Authentication authentication, HttpSession session) {
-    if (authentication != null && authentication.isAuthenticated()) {
-      String username = authentication.getName();
-      String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().orElse("");
-      return ResponseEntity.ok(Map.of("username", username,"role", role));
-    }
-    return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-  }
 
   @PreAuthorize("isAnonymous()")
   @Operation(summary= "아이디 확인", description="아이디가 사용가능한 지 확인")
@@ -45,10 +36,9 @@ public class AccountController {
 
   @PreAuthorize("isAnonymous()")
   @Operation(summary= "체크코드 보내기", description="이메일을 전달받아 체크코드 발송")
-  @GetMapping("/api/account/send-verification-code")
-  public ResponseEntity<String> sendVerificationCode(@NotEmpty @Email String email, BindingResult br, HttpSession session) {
-    String checkCode = service.sendVerificationCode(email);
-    session.setAttribute("checkCode", checkCode);
+  @PostMapping("/api/account/send-verification-code")
+  public ResponseEntity<String> sendVerificationCode(@Valid AccountDto.EmailCheck dto, BindingResult br) {
+    service.sendVerificationCode(dto.getEmail());
     return ResponseEntity.ok("이메일을 확인하세요");
   }
 
@@ -64,7 +54,7 @@ public class AccountController {
   @PreAuthorize("isAnonymous()")
   @Operation(summary="임시비밀번호 발급", description="아이디로 임시비밀번호를 발급")
   @PostMapping("/api/account/password/reset")
-  public ResponseEntity<String> resetPassword(@ModelAttribute @Valid AccountDto.ResetPassword dto, BindingResult br) {
+  public ResponseEntity<String> resetPassword(@ModelAttribute @Valid AccountDto.PasswordReset dto, BindingResult br) {
     boolean result = service.resetPassword(dto);
     if(result) return ResponseEntity.ok("임시비밀번호를 이메일로 보냈습니다");
     return ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다");
@@ -74,7 +64,7 @@ public class AccountController {
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "비밀번호 변경", description = "기존 비밀번호, 새 비밀번호로 비밀번호 변경")
   @PutMapping("/api/account/password")
-  public ResponseEntity<String> changePassword(@ModelAttribute @Valid MemberDto.PasswordChange dto, BindingResult br, Principal principal) {
+  public ResponseEntity<String> changePassword(@ModelAttribute @Valid AccountDto.PasswordChange dto, BindingResult br, Principal principal) {
     boolean result = service.changePassword(dto, principal.getName());
     return result? ResponseEntity.ok(null):ResponseEntity.status(409).body(null);
   }

@@ -26,13 +26,20 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+		String authHeader = request.getHeader("Authorization");
+
+		// 토큰이 없거나 Bearer로 시작하지 않으면 anonymous로 둔 채 다음 필터로
+		if(authHeader==null || !authHeader.startsWith("Bearer ")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+
 		String accessToken = request.getHeader("Authorization").substring(7);
 		Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 		String username = (String)claims.get("username");
-		String password = (String)claims.get("password");
 		String roleName = (String)claims.get("roleName");
-		CustomUserDetails dto = new CustomUserDetails(username, password, roleName);
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto, dto.getPassword(), dto.getAuthorities());
+		CustomUserDetails dto = new CustomUserDetails(username, null, roleName);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto, null, dto.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(token);
 		filterChain.doFilter(request, response);
 	}
