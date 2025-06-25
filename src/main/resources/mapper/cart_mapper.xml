@@ -10,7 +10,7 @@
   </delete>
 
   <select id="findSelectedCartItems" resultType="com.example.demo.dto.CartDto$Summary">
-    select c.product_id, c.name, c.quantity, c.quantity*p.price, p.image  from cartitem c join product p where c.username=#{username} and cart_item_in in
+    select c.product_id, c.name, c.quantity, c.quantity*p.price from cartitem c join product p where c.username=#{username} and cart_item_in in
     <foreach collection="list" item="item" open="(" close=")" separator=",">
       #{item}
 	</foreach>

@@ -2,15 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.productMapper">
   <select id="findAllBySeller" resultType="com.example.demo.dto.ProductDto$Summary">
-	select pno, seller, name, price, image, sales_volume, review_count, total_stars/review_count as star from product
+	select pno, seller, name, price, (select name from product_image pi where pi.product_id=product_id and rownum=1) as image, sales_volume, review_count, total_stars/review_count as star from product
     where seller=#{seller} order by pno desc
 	offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>
 
   <select id="findAll" resultType="com.example.demo.dto.ProductDto$Summary">
-	select pno, seller, name, price, image, sales_volume, review_count, total_stars/review_count as star from product
-	order by pno desc
-	offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
+      select pno, seller, name, price, (select name from product_image pi where pi.product_id=product_id and rownum=1) as image, sales_volume, review_count, total_stars/review_count as star from product
+      order by pno desc offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>
 
   <update id="update">

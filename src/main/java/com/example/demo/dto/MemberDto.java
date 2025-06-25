@@ -28,9 +28,8 @@ public class MemberDto {
     private MultipartFile profile;
 
     public Member toEntity(PasswordEncoder passwordEncoder) {
-      String profileString = FunctionUtil.getProfile(profile, false).get();
       String encodedPassword = passwordEncoder.encode(password);
-      return new Member(username, encodedPassword, email, birthday, profileString);
+      return new Member(username, encodedPassword, email, birthday, null);
     }
   }
 

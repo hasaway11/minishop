@@ -20,14 +20,12 @@ public class MemberService {
   private final MemberMapper memberDao;
   private final PasswordEncoder passwordEncoder;
 
-  @PostConstruct
-  public void init() {
-    FunctionUtil.initDefaultProfile();
-  }
 
   @Transactional
   public Member signup(MemberDto.Signup dto) {
     Member member = dto.toEntity(passwordEncoder);
+    String profileName = ImageUtil.saveProfile(dto.getProfile(), dto.getUsername());
+    member.setProfile(profileName);
     accountMapper.save(member);
     return memberDao.save(member);
   }
@@ -38,7 +36,7 @@ public class MemberService {
   }
 
   public boolean changeProfile(MemberDto.changeProfile dto, String loginId) {
-    Optional<String> result = FunctionUtil.getProfile(dto.getProfile(), true);
-    return result.filter(newProfile -> memberDao.updateProfile(newProfile, loginId) == 1).isPresent();
+    String newProfile = ImageUtil.saveProfile(dto.getProfile(), loginId);
+    return memberDao.updateProfile(newProfile, loginId) == 1;
   }
 }

@@ -3,7 +3,10 @@ package com.example.demo.entity.product;
 import com.example.demo.dto.*;
 
 import com.example.demo.exception.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.*;
 
 @Getter
 @AllArgsConstructor
@@ -13,7 +16,6 @@ public class Product {
   private String seller;
   private String name;
   private String info;
-  private String image;
   private Integer price;
   private Integer salesVolume;
   private Integer salesAmount;
@@ -22,8 +24,8 @@ public class Product {
   private Integer stock;
   private Integer category;
 
-  public ProductDto.Read toRead() {
-    return new ProductDto.Read(productId, name, info, image, price, (double)totalStars/reviewCount, reviewCount, stock);
+  public ProductDto.Read toRead(List<String> images) {
+    return new ProductDto.Read(productId, name, info, price, (double)totalStars/reviewCount, reviewCount, stock, images);
   }
 
   public void checkSellerOrThorw(String loginId) {

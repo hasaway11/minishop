@@ -1,11 +1,8 @@
 package com.example.demo.entity.order;
 
-import com.example.demo.entity.account.*;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.*;
-import java.util.*;
 
 @Getter
 @AllArgsConstructor
@@ -16,6 +13,6 @@ public class Order {
   private String username;
   private LocalDateTime orderDate;
   private String deliveryAddress;
-  private DeliveryStatus status;
+  private OrderStatus status;
   private Integer orderTotalPrice;
 }

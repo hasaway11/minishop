@@ -6,6 +6,8 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.web.multipart.*;
 
+import java.util.*;
+
 @NoArgsConstructor(access = AccessLevel. PRIVATE)
 public class ProductDto {
   @Data
@@ -14,7 +16,8 @@ public class ProductDto {
     private String name;
     @NotEmpty
     private String info;
-    private MultipartFile image;
+    @NotEmpty
+    private List<MultipartFile> images;
     @NotNull
     private Integer price;
     @NotNull
@@ -23,7 +26,7 @@ public class ProductDto {
     private Integer category;
 
     public Product toEntity(String seller) {
-      return new Product(0, seller, name, info, null, price, 0, 0, 0, 0, stock, category);
+      return new Product(0, seller, name, info, price, 0, 0, 0, 0, stock, category);
     }
   }
 
@@ -56,11 +59,10 @@ public class ProductDto {
     private String name;
     @Lob
     private String info;
-    @Lob
-    private String image;
     private Integer price;
     private Double star;
     private Integer reviewCount;
     private Integer stock;
+    private List<String> images;
   }
 }

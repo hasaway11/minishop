@@ -26,8 +26,16 @@ public class OrderDto {
   public static class Orders {
     private Integer orderId;
     private LocalDateTime orderDate;
-    private DeliveryStatus status;
+    private OrderStatus status;
     private Integer orderTotalPrice;
-    private List<Item> orderItems;
+    private List<OrderDto.Item> orderItems;
+
+    public Orders(Order order, List<OrderDto.Item> orderItems) {
+      this.orderId = order.getOrderId();
+      this.orderDate = order.getOrderDate();
+      this.status = order.getStatus();
+      this.orderTotalPrice = order.getOrderTotalPrice();
+      this.orderItems = orderItems;
+    }
   }
 }

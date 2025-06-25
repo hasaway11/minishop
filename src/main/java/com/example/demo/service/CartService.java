@@ -14,11 +14,17 @@ import java.util.*;
 @Service
 public class CartService {
   private final CartMapper cartDao;
+  private final ProductMapper productDao;
 
   private CartDto.Carts getCart(String loginId) {
     List<CartDto.Summary> cartItems = cartDao.findCartItemByUsername(loginId);
     int cartTotalPrice = cartItems.stream().mapToInt(CartDto.Summary::getTotalPrice).sum();
     return new CartDto.Carts(cartItems, cartTotalPrice);
+  }
+
+  private void stockCheckOrElseThrow(Integer productId) {
+    if(!productDao.hasStock(productId))
+      throw new OutOfStockException();
   }
 
   @Transactional(readOnly=true)
@@ -29,6 +35,7 @@ public class CartService {
   @Transactional
   public CartDto.Carts addToCart(Integer productId, String loginId) {
     // 고객 장바구니에 상품이 들어있으면 개수 증가, 없으면 추가
+    stockCheckOrElseThrow(productId);
     Optional<CartItem> cartItem = cartDao.findByUsernameAndProductId(loginId, productId);
     if (cartItem.isPresent())
       cartDao.increaseQuantity(cartItem.get().getCartItemId());
@@ -41,6 +48,7 @@ public class CartService {
     Optional<CartItem> cartItem = cartDao.findById(cartItemId);
     if(cartItem.isEmpty())
       throw new JobFailException("작업을 수행할 수 없습니다");
+    stockCheckOrElseThrow(cartItem.get().getProductId());
     cartDao.increaseQuantity(cartItemId);
     return getCart(loginId);
   }

@@ -2,11 +2,13 @@ drop table account;
 drop table member;
 drop table seller;
 drop table product;
+drop table product_iamge;
 drop table cart_item;
-drop table order;
+drop table orders;
 drop table order_item;
 
 drop sequence product_seq;
+drop sequence image_seq;
 drop sequence cart_item_seq;
 drop sequence orders_seq;
 
@@ -21,7 +23,7 @@ create table account (
 create table member (
    username varchar2(10 char),
    birth_date date,
-   profile clob,
+   profile varchar2(15 char),
    member_level varchar2(10 char),
    constraint member_pk_username primary key(username)
 );
@@ -41,7 +43,6 @@ create table product (
     product_id number(6),
     name varchar2(10 char),
     info clob,
-    image varchar2(10 char),
     price number(7),
     sales_volume number(5),
     sales_amout number(10),
@@ -49,10 +50,18 @@ create table product (
     review_count number(5),
     stock number(3),
     category number(3),
-    constraint product_pk_pno primary key(product_id)
+    constraint product_pk primary key(product_id)
+);
+
+create table product_image (
+    image_id number(7),
+    name varchar2(41 char),
+    product_id number(6),
+    constraint image_pk primary key(image_id)
 );
 
 create sequence product_seq;
+create sequence product_image_seq;
 
 create table cart_item (
   cart_item_id number(7),
@@ -67,7 +76,10 @@ create sequence cart_item_seq;
 create table orders (
   order_id number(7),
   username varchar2(10 char),
+  address varchar2(50 char),
   order_date date,
+  paid_date date,
+  cancel_date date,
   status varchar2(10 char),
   order_total_price number(10),
   constraint order_pk primary key(order_id)
@@ -82,3 +94,4 @@ create table order_item (
 );
 
 create sequence orders_seq;
+

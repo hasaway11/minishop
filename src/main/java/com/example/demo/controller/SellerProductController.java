@@ -33,7 +33,7 @@ public class SellerProductController {
   }
 
   @GetMapping("/api/seller/products/{productId}")
-  public ResponseEntity<Product> read(@PathVariable int productId, Principal principal) {
+  public ResponseEntity<ProductDto.Read> read(@PathVariable int productId, Principal principal) {
     return ResponseEntity.ok(service.read(productId, principal.getName()));
   }
 

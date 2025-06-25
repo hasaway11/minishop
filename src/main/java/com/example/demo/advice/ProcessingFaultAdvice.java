@@ -26,4 +26,9 @@ public class ProcessingFaultAdvice {
   public ResponseEntity<String> jobFailException(JobFailException e) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
   }
+
+  @ExceptionHandler(OutOfStockException.class)
+  public ResponseEntity<String> outOfStockException() {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body("재고가 부족합니다");
+  }
 }

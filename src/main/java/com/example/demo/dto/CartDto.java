@@ -13,6 +13,7 @@ public class CartDto {
     private Integer quantity;
     private Integer totalPrice;
     private String image;
+    private int stock;
   }
 
   @Data

@@ -8,7 +8,7 @@ import java.util.*;
 
 @Mapper
 public interface CartMapper {
-  @Select("select c.product_id, c.name, c.quantity, c.quantity*p.price, p.image  from cartitem c join product p where c.username=#{username} and rownum=1")
+  @Select("select c.product_id, c.name, c.quantity, c.quantity*p.price, p.image, p.stock from cartitem c join product p where c.username=#{username} and rownum=1")
   List<CartDto.Summary> findCartItemByUsername(String username);
 
   @Select("select * from cart_item where username=#{username} and product_id=#{productId} and rownum=1")
@@ -28,6 +28,5 @@ public interface CartMapper {
 
   int delete(List<Integer> list, String username);
 
-  @Select("select c.product_id, c.name, c.quantity, p.price, p.image  from cartitem c join product p where c.username=#{username} ")
-  List<CartDto.Summary> findSelectedCartItems(List<Integer> selectedCartItemIds);
+  List<CartDto.Summary> findSelectedCartItems(List<Integer> selectedCartItemIds, String username);
 }

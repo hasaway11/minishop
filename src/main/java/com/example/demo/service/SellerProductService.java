@@ -5,6 +5,7 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.product.*;
 import com.example.demo.exception.*;
 
+import com.example.demo.util.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
@@ -16,6 +17,8 @@ import java.util.*;
 public class SellerProductService {
   private final ProductMapper productDao;
   private final CategoryMapper categoryDao;
+  private final ProductImageMapper productImageDao;
+
   private final int PAGE_SIZE = 12;
 
   @Transactional(readOnly=true)
@@ -25,16 +28,24 @@ public class SellerProductService {
     return new PageResponse<>(products, pageno, PAGE_SIZE, totalCount);
   }
 
+  @Transactional
   public Product create(ProductDto.Create dto, String loginId) {
     Product product = dto.toEntity(loginId);
-    return productDao.save(product);
+    List<String> imageNames = ImageUtil.savaProductImage(dto.getImages());
+    productDao.save(product);
+    for(String imageName:imageNames) {
+      ProductImage pi = new ProductImage(null, imageName, product.getProductId());
+      productImageDao.save(pi);
+    }
+    return product;
   }
 
   @Transactional(readOnly=true)
-  public Product read(int pno, String loginId) {
-    Product product = productDao.findById(pno).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+  public ProductDto.Read read(int productId, String loginId) {
+    Product product = productDao.findById(productId).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+    List<String> imageNames = productImageDao.findByProductId(productId);
     product.checkSellerOrThorw(loginId);
-    return product;
+    return product.toRead(imageNames);
   }
 
   @Transactional
@@ -51,5 +62,8 @@ public class SellerProductService {
     Product product = productDao.findById(productId).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
     product.checkSellerOrThorw(loginId);
     productDao.delete(productId);
+    List<String> imageNames = productImageDao.findByProductId(productId);
+    ImageUtil.deleteProductImages(imageNames);
+    productImageDao.deleteByProductId(productId);
   }
 }
