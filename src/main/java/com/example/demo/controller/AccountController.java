@@ -60,15 +60,6 @@ public class AccountController {
     return ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다");
   }
 
-  // 비번 변경
-  @PreAuthorize("isAuthenticated()")
-  @Operation(summary = "비밀번호 변경", description = "기존 비밀번호, 새 비밀번호로 비밀번호 변경")
-  @PutMapping("/api/account/password")
-  public ResponseEntity<String> changePassword(@ModelAttribute @Valid AccountDto.PasswordChange dto, BindingResult br, Principal principal) {
-    boolean result = service.changePassword(dto, principal.getName());
-    return result? ResponseEntity.ok(null):ResponseEntity.status(409).body(null);
-  }
-
   @PreAuthorize("isAuthenticated")
   @Operation(summary="비밀번호 확인", description="현재 접속 중인 사용자의 비밀번호를 재확인")
   @GetMapping("/api/account/check-password")
@@ -76,5 +67,14 @@ public class AccountController {
     boolean result = service.checkPassword(password, principal.getName());
     if(result) return ResponseEntity.ok("비밀번호 확인 성공");
     return ResponseEntity.status(HttpStatus.CONFLICT).body("비밀번호 확인 실패");
+  }
+
+  // 비번 변경
+  @PreAuthorize("isAuthenticated()")
+  @Operation(summary = "비밀번호 변경", description = "기존 비밀번호, 새 비밀번호로 비밀번호 변경")
+  @PutMapping("/api/account/password")
+  public ResponseEntity<String> changePassword(@ModelAttribute @Valid AccountDto.PasswordChange dto, BindingResult br, Principal principal) {
+    boolean result = service.changePassword(dto, principal.getName());
+    return result? ResponseEntity.ok(null):ResponseEntity.status(409).body(null);
   }
 }

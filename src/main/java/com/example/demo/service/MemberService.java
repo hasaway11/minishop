@@ -45,18 +45,18 @@ public class MemberService {
     return memberDao.findById(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다")).toRead();
   }
 
-  public boolean changeProfile(MemberDto.changeProfile dto, String loginId) {
+  public void changeProfile(MemberDto.changeProfile dto, String loginId) {
     Member member = memberDao.findById(loginId).get();
     MultipartFile file = dto.getProfile();
     String ext = FilenameUtils.getExtension(file.getOriginalFilename());
     String newProfileName = loginId + "." + ext;
     if(member.getProfile().equals(newProfileName)) {
-      프사덮어쓰기;
+      ImageUtil.saveProfile(dto.getProfile(), loginId);
       return;
     }
     if(memberDao.updateProfile(newProfileName, loginId)==1) {
-      새프사저장;
-      기존프사삭제;
+      ImageUtil.saveProfile(dto.getProfile(), loginId);
+      ImageUtil.deleteProfile(member.getProfile());
     }
     // 업데이트 실패라면 새프사를 저장하지 않는다. 따라서 기존프사 유지
   }

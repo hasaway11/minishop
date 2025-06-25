@@ -1,14 +1,14 @@
 AccountController (/api/accounts)
 - 1. 아이디 사용여부 확인
-- 2. 이메일을 전달받아 체크코드를 생성해 발송 (이메일, 체크코드는 세션에 저장)
+- 2. 이메일을 전달받아 체크코드를 생성해 발송
 - 3. 아이디 찾기
 - 4. 비밀번호 리셋
 - 5. 비밀번호 확인
+- 6. 비밀번호 변경
 
 MemberController (/api/members)
-- 6. 멤버회원 가입
-- 7. 내정보 보기
-- 8. 비밀번호 변경
+- 7. 멤버회원 가입
+- 8. 내정보 보기
 - 9. 프사 변경
 
 SellerController (/api/seller)
@@ -16,12 +16,22 @@ SellerController (/api/seller)
 - 11. 셀러회원 정보 보기
 - 12. 회원등급 변경
 
-ProductController(/api/product)
-- 13. 상품 추가
-- 14. 상품 목록
-- 15. 상품 읽기
-- 16. 상품 변경
-- 17. 상품 삭제
+ImageController
+- 13. 이미지 출력
+
+APIRefreshController
+- 14. 토큰 갱신
+
+SellerProductController(/api/product)
+- 15. 상품 추가
+- 16. 상품 목록
+- 17. 상품 읽기
+- 18. 상품 변경
+- 19. 상품 삭제
+
+ProductController
+- 20. 상품 페이징
+- 21. 상품 읽기
 
 CartController(/api/cart)
 - 18. 상품 추가
