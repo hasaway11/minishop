@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.dao.productMapper">
+<mapper namespace="com.example.demo.dao.ProductMapper">
   <select id="findAllBySeller" resultType="com.example.demo.dto.ProductDto$Summary">
 	select pno, seller, name, price, (select name from product_image pi where pi.product_id=product_id and rownum=1) as image, sales_volume, review_count, total_stars/review_count as star from product
     where seller=#{seller} order by pno desc

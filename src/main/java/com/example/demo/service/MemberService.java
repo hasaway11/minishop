@@ -5,15 +5,13 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.account.*;
 import com.example.demo.exception.*;
 import com.example.demo.util.*;
-import jakarta.annotation.*;
+
 import lombok.*;
 import org.apache.commons.io.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 import org.springframework.web.multipart.*;
-
-import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -22,7 +20,6 @@ public class MemberService {
   private final MemberMapper memberDao;
   private final EmailVerificationMapper emailVerificationDao;
   private final PasswordEncoder passwordEncoder;
-
 
   @Transactional
   public Member signup(MemberDto.Signup dto) {
@@ -58,6 +55,6 @@ public class MemberService {
       ImageUtil.saveProfile(dto.getProfile(), loginId);
       ImageUtil.deleteProfile(member.getProfile());
     }
-    // 업데이트 실패라면 새프사를 저장하지 않는다. 따라서 기존프사 유지
+    // 업데이트 실패라면 새프사를 저장하지 않고 기존프사 유지
   }
 }

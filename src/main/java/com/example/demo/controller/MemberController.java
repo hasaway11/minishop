@@ -40,7 +40,7 @@ public class MemberController {
   @Operation(summary = "프사 변경", description = "프사를 변경")
   @PutMapping("/api/member/profile")
   public ResponseEntity<Void> changeProfile(@Valid MemberDto.changeProfile dto, BindingResult br, Principal principal) {
-    boolean result = service.changeProfile(dto, principal.getName());
-    return result? ResponseEntity.ok(null):ResponseEntity.status(409).body(null);
+    service.changeProfile(dto, principal.getName());
+    return ResponseEntity.ok(null);
   }
 }

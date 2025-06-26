@@ -2,7 +2,6 @@ package com.example.demo.dao;
 
 
 import com.example.demo.entity.account.*;
-import jakarta.validation.constraints.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.*;
@@ -18,7 +17,7 @@ public interface AccountMapper {
   @Select("select password from account where email=#{email} and rownum=1")
   Optional<String> findUsernameByEmail(String email);
 
-  @Select("select * from account where username=#{username}")
+  @Select("select username, password, email from account where username=#{username}")
   Optional<Account> findById(String username);
 
   @Select("select password from account where username=#{username}")

@@ -6,8 +6,8 @@ import java.time.*;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access=AccessLevel.PROTECTED)
-public abstract class Account {
+@NoArgsConstructor
+public class Account {
   private String username;
   private String password;
   private String email;

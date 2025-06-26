@@ -29,6 +29,7 @@ public class SecurityConfig {
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity config) throws Exception {
     config.cors(cors->cors.configurationSource(corsConfigurationSource()));
+    config.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     config.csrf(csrf-> csrf.disable());
     config.formLogin(form->form.loginPage("/login").loginProcessingUrl("/login").successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler));
     config.logout(logout-> logout.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler));

@@ -10,6 +10,7 @@ import com.example.demo.exception.*;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.*;
+import jakarta.servlet.http.*;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -31,15 +32,13 @@ public class JWTUtil {
 		try {
 			return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
 		} catch (MalformedJwtException e) {
-			throw new CustomJWTException("MalFormed");
+			throw new CustomJWTException("잘못된 액세스 토큰 형식");
 		} catch (ExpiredJwtException e) {
-			throw new CustomJWTException("Expired");
+			throw new CustomJWTException("TOKEN_EXPIRED");
 		} catch (InvalidClaimException e) {
-			throw new CustomJWTException("Invalid");
+			throw new CustomJWTException("액세스 토큰의 내용이 유효하지 않음");
 		} catch (JwtException e) {
-			throw new CustomJWTException("JWTError");
-		} catch (Exception e) {
-			throw new CustomJWTException("Error");
+			throw new CustomJWTException("알수없는 JWT 오류");
 		}
 	}
 }

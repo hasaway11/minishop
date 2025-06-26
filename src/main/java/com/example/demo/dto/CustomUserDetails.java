@@ -20,6 +20,10 @@ public class CustomUserDetails extends User {
   }
 
   public Map<String, Object> getClaims() {
-    return Map.of("username", username, "password", password, "roleName", roleName);
+    Map<String,Object> map = new HashMap<>();
+    map.put("username", username);
+    map.put("password", password);
+    map.put("roleName", roleName);
+    return map;
   }
 }

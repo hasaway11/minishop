@@ -17,8 +17,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     CustomUserDetails user = (CustomUserDetails)authentication.getPrincipal();
     Map<String,Object> claims = user.getClaims();
-    claims.put("accessToken", JWTUtil.generateToken(claims, 10));
-    claims.put("refreshToken", JWTUtil.generateToken(claims, 1440));
+    String accessToken = JWTUtil.generateToken(claims, 10);
+    String refreshToken = JWTUtil.generateToken(claims, 1440);
+    claims.put("accessToken", accessToken);
+    claims.put("refreshToken", refreshToken);
     ResponseUtil.sendJsonResponse(response, 200, claims);
   }
 }

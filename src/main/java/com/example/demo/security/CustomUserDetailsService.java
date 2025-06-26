@@ -11,7 +11,7 @@ import org.springframework.stereotype.*;
 @RequiredArgsConstructor
 @Component
 public class CustomUserDetailsService implements UserDetailsService  {
-  private AccountMapper accountDao;
+  private final AccountMapper accountDao;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -10,9 +10,13 @@ public class ResponseUtil {
   private static final ObjectMapper mapper = new ObjectMapper();
 
   // Jackson 라이브러리를 이용해 객체를 JSON 문자열로 변경하는 정적 메소드
-  public static void sendJsonResponse(HttpServletResponse res, int statusCode, Object body) throws IOException {
-    res.setStatus(statusCode);
-    res.setContentType("application/json; charset=UTF-8");
-    res.getWriter().write(mapper.writeValueAsString(body));
+  public static void sendJsonResponse(HttpServletResponse res, int statusCode, Object body) {
+    try {
+      res.setStatus(statusCode);
+      res.setContentType("application/json; charset=UTF-8");
+      res.getWriter().write(mapper.writeValueAsString(body));
+    } catch(IOException e) {
+      e.printStackTrace();
+    }
   }
 }

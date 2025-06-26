@@ -3,6 +3,8 @@ package com.example.demo.security.filter;
 import java.io.*;
 import java.util.*;
 
+import com.example.demo.exception.*;
+import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.context.*;
 import org.springframework.web.filter.*;
@@ -35,12 +37,21 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		String accessToken = request.getHeader("Authorization").substring(7);
-		Map<String, Object> claims = JWTUtil.validateToken(accessToken);
-		String username = (String)claims.get("username");
-		String roleName = (String)claims.get("roleName");
-		CustomUserDetails dto = new CustomUserDetails(username, null, roleName);
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto, null, dto.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(token);
-		filterChain.doFilter(request, response);
+		try {
+			Map<String, Object> claims = JWTUtil.validateToken(accessToken);
+			String username = (String)claims.get("username");
+			String password = (String)claims.get("password");
+			String roleName = (String)claims.get("roleName");
+			CustomUserDetails dto = new CustomUserDetails(username, password, roleName);
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto, password, dto.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(token);
+			filterChain.doFilter(request, response);
+		} catch(CustomJWTException e) {
+			if(e.getMessage().equals("TOKEN_EXPIRED")) {
+				ResponseUtil.sendJsonResponse(response, 401, "TOKEN_EXPIRED");
+			} else {
+				ResponseUtil.sendJsonResponse(response, 401, "INVALID_TOKEN");
+			}
+		}
 	}
 }

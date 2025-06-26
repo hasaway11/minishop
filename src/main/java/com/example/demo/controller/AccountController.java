@@ -35,9 +35,9 @@ public class AccountController {
   }
 
   @PreAuthorize("isAnonymous()")
-  @Operation(summary= "체크코드 보내기", description="이메일을 전달받아 체크코드 발송")
-  @PostMapping("/api/account/send-verification-code")
-  public ResponseEntity<String> sendVerificationCode(@Valid AccountDto.EmailCheck dto, BindingResult br) {
+  @Operation(summary= "체크코드 신청", description="이메일을 전달받아 체크코드 발송")
+  @PostMapping("/api/account/request-verification-code")
+  public ResponseEntity<String> requestVerificationCode(@Valid AccountDto.EmailCheck dto, BindingResult br) {
     service.sendVerificationCode(dto.getEmail());
     return ResponseEntity.ok("이메일을 확인하세요");
   }
@@ -60,7 +60,7 @@ public class AccountController {
     return ResponseEntity.status(HttpStatus.CONFLICT).body("사용자를 찾을 수 없습니다");
   }
 
-  @PreAuthorize("isAuthenticated")
+  @PreAuthorize("isAuthenticated()")
   @Operation(summary="비밀번호 확인", description="현재 접속 중인 사용자의 비밀번호를 재확인")
   @GetMapping("/api/account/check-password")
   public ResponseEntity<String> checkPassword(@RequestParam String password, Principal principal) {
