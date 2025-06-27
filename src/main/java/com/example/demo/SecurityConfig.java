@@ -31,8 +31,8 @@ public class SecurityConfig {
     config.cors(cors->cors.configurationSource(corsConfigurationSource()));
     config.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     config.csrf(csrf-> csrf.disable());
-    config.formLogin(form->form.loginPage("/login").loginProcessingUrl("/login").successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler));
-    config.logout(logout-> logout.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler));
+    config.formLogin(form->form.loginPage("/api/login").loginProcessingUrl("/api/login").successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler));
+    config.logout(logout-> logout.logoutUrl("/api/logout").logoutSuccessHandler(logoutSuccessHandler));
     config.exceptionHandling(handler->handler.accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(authenticationEntryPoint));
     config.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     return config.build();
