@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.product.*;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.web.multipart.*;
@@ -55,9 +54,7 @@ public class ProductDto {
   @Data
   public static class Read {
     private Integer productId;
-    @Column(length=20)
     private String name;
-    @Lob
     private String info;
     private Integer price;
     private Double star;

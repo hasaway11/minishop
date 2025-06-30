@@ -1,9 +1,6 @@
 package com.example.demo.entity.product;
 
-import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.*;
 
 @Getter
 @NoArgsConstructor

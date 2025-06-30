@@ -32,7 +32,7 @@ public class MemberDto {
 
     public Member toEntity(PasswordEncoder passwordEncoder) {
       String encodedPassword = passwordEncoder.encode(password);
-      return new Member(username, encodedPassword, email, birthday, null);
+      return new Member(username, encodedPassword, email, "MEMBER", birthday, null, MemberLevel.NORMAL);
     }
   }
 

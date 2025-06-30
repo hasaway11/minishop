@@ -30,7 +30,9 @@ public class JWTUtil {
 
 	public static Map<String,Object> validateToken(String token) {
 		try {
-			return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
+			Map<String,Object> result =  Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
+			System.out.print(result);
+			return result;
 		} catch (MalformedJwtException e) {
 			throw new CustomJWTException("잘못된 액세스 토큰 형식");
 		} catch (ExpiredJwtException e) {

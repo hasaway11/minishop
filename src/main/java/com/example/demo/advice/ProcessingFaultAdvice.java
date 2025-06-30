@@ -1,5 +1,6 @@
 package com.example.demo.advice;
 
+import com.example.demo.entity.account.*;
 import com.example.demo.exception.*;
 import jakarta.validation.*;
 import org.springframework.http.*;
@@ -27,6 +28,11 @@ public class ProcessingFaultAdvice {
   @ExceptionHandler(JobFailException.class)
   public ResponseEntity<String> jobFailException(JobFailException e) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+  }
+
+  @ExceptionHandler(EmailVerificationRequireException.class)
+  public ResponseEntity<String> emailVerificationRequireException() {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이메일 인증이 필요합니다");
   }
 
   @ExceptionHandler(OutOfStockException.class)

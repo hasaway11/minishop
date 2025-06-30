@@ -23,9 +23,6 @@ public class MemberService {
 
   @Transactional
   public Member signup(MemberDto.Signup dto) {
-    boolean isCodeExist = emailVerificationDao.existsByIdAndCode(dto.getEmail(), dto.getCode());
-    if(!isCodeExist)
-      throw new JobFailException("잘못된 확인코드입니다");
     if(accountDao.existsById(dto.getUsername()))
       throw new JobFailException("사용중인 아이디입니다");
     Member member = dto.toEntity(passwordEncoder);

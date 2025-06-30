@@ -1,7 +1,6 @@
 package com.example.demo.entity.account;
 
 import com.example.demo.dto.*;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.*;
@@ -13,11 +12,11 @@ public class Member extends Account {
   @Setter private String profile;
   private MemberLevel memberLevel;
 
-  public Member(String username, String password, String email, LocalDate birthday, String profile) {
-    super(username, password, email, LocalDate.now());
-    this.birthDate = birthday;
+  public Member(String username, String password, String email, String role, LocalDate birthDate, String profile, MemberLevel memberLevel) {
+    super(username, password, email, LocalDate.now(), role);
+    this.birthDate = birthDate;
     this.profile = profile;
-    this.memberLevel = MemberLevel.NORMAL;
+    this.memberLevel = memberLevel;
   }
 
   public MemberDto.Read toRead() {

@@ -11,13 +11,13 @@ public interface AccountMapper {
   @Select("select count(*) from account where username=#{username} and rownum=1")
   boolean existsById(String username);
 
-  @Insert("insert into account values(#{username}, #{password}, #{email}, #{signupDate})")
+  @Insert("insert into account values(#{username}, #{password}, #{email}, #{signupDate}, #{role})")
   int save(Account account);
 
   @Select("select password from account where email=#{email} and rownum=1")
   Optional<String> findUsernameByEmail(String email);
 
-  @Select("select username, password, email from account where username=#{username}")
+  @Select("select username, password, email, role from account where username=#{username}")
   Optional<Account> findById(String username);
 
   @Select("select password from account where username=#{username}")

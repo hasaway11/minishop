@@ -37,11 +37,15 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		String accessToken = request.getHeader("Authorization").substring(7);
+		System.out.println(accessToken);
 		try {
 			Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 			String username = (String)claims.get("username");
 			String password = (String)claims.get("password");
 			String roleName = (String)claims.get("roleName");
+			System.out.println(username);
+			System.out.println(password);
+			System.out.println(roleName);
 			CustomUserDetails dto = new CustomUserDetails(username, password, roleName);
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto, password, dto.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(token);

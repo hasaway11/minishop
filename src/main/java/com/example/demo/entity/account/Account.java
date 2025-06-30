@@ -12,6 +12,7 @@ public class Account {
   private String password;
   private String email;
   private LocalDate signupDate;
+  private String role;
 
   public Account(String username) {
     this.username = username;

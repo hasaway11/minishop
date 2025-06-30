@@ -2,19 +2,30 @@ package com.example.demo.dto;
 
 import com.example.demo.entity.account.*;
 import com.fasterxml.jackson.annotation.*;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import org.hibernate.annotations.*;
-import org.hibernate.validator.constraints.*;
 import org.springframework.security.crypto.password.*;
 
 import java.time.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SellerDto {
+  @Data
+  public static class EmailVerification {
+    @NotEmpty(message="이메일은 필수입력입니다")
+    @Email
+    private String email;
+  }
+
+  @Data
+  public static class CheckVerifyCode {
+    @NotEmpty(message="확인코드는 필수입력입니다")
+    @Pattern(regexp="^[a-zA-Z0-9]{10}$", message="확인코드는 영숫자 10자입니다")
+    private String code;
+  }
+
   @Data
   public static class Signup {
     @NotEmpty(message="아이디는 필수입력입니다")
@@ -34,13 +45,10 @@ public class SellerDto {
     @NotEmpty(message="회사 주소는 필수입력입니다")
     private String address;
     private SellerLevel sellerLevel;
-    @NotEmpty(message="확인코드는 필수입력입니다")
-    @Pattern(regexp="^[a-zA-Z0-9]{10}$", message="확인코드는 영숫자 10자입니다")
-    private String code;
 
     public Seller toEntity(PasswordEncoder passwordEncoder) {
       String encodedPassword = passwordEncoder.encode(password);
-      return new Seller(username, encodedPassword, email, companyName, representative, address);
+      return new Seller(username, encodedPassword, email, LocalDate.now(), "SELLER", companyName, representative, address, SellerLevel.POWER, 0, 0);
     }
   }
 

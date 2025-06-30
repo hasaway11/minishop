@@ -4,6 +4,7 @@ import com.example.demo.dao.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.account.*;
 import com.example.demo.exception.*;
+import com.example.demo.util.*;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import lombok.*;
@@ -20,23 +21,11 @@ import java.util.*;
 @Service
 public class AccountService {
   private final AccountMapper accountDao;
-  private final JavaMailSender mailSender;
+  private final EmailUtil emailUtil;
   private final EmailVerificationMapper emailVerificationDao;
   private final PasswordEncoder passwordEncoder;
 
-  private void sendMail(String from, String to, String title, String text) {
-    MimeMessage message = mailSender.createMimeMessage();
-    try {
-      MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
-      helper.setFrom(from);
-      helper.setTo(to);
-      helper.setSubject(title);
-      helper.setText(text, true);
-      mailSender.send(message);
-    } catch (MessagingException e) {
-      e.printStackTrace();
-    }
-  }
+
 
   @Transactional(readOnly=true)
   public boolean idAvailable(AccountDto.UsernameCheck dto) {
@@ -45,10 +34,10 @@ public class AccountService {
 
   public void sendVerificationCode(String email) {
     String checkCode = RandomStringUtils.secure().nextAlphanumeric(10);
-    sendMail("admin@minishop.co.kr", email, "확인코드", checkCode);
+    emailUtil.sendMail("admin@minishop.co.kr", email, "확인코드", checkCode);
     LocalDateTime sendAt = LocalDateTime.now();
     LocalDateTime expiresAt = sendAt.plusDays(1);
-    emailVerificationDao.save(email, checkCode, sendAt, expiresAt);
+    emailVerificationDao.save(new EmailVerification(email, checkCode));
   }
 
   @Transactional(readOnly=true)
@@ -66,7 +55,7 @@ public class AccountService {
 
     String content = "<p>아래 임시비밀번호로 로그인하세요</p>";
     content+= "<p>" + newPassword  + "</p>";
-    sendMail("admin@icia.com", account.getEmail(), "임시비밀번호", content);
+    emailUtil.sendMail("admin@icia.com", account.getEmail(), "임시비밀번호", content);
     return true;
   }
 

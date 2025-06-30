@@ -1,6 +1,7 @@
 package com.example.demo.entity.account;
 
 import com.example.demo.dto.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.*;
@@ -14,23 +15,24 @@ public class Seller extends Account {
   private String companyName;
   private String representative;
   private String address;
-  private SellerLevel sellerLevel = SellerLevel.POWER;
+  private SellerLevel sellerLevel;
   private Integer salesCount;
   private Integer salesAmount;
 
-  public Seller(String username, String password, String email, String companyName, String representative, String address) {
-    super(username, password, email, LocalDate.now());
+  public Seller(String username, String password, String email, LocalDate signupDate, String role, String companyName, String representative, String address, SellerLevel sellerLevel, int salesCount, int salesAmount) {
+    super(username, password, email, signupDate, role);
     this.companyName = companyName;
     this.representative = representative;
     this.address = address;
-    this.sellerLevel = SellerLevel.POWER;
-    this.salesCount = 0;
-    this.salesAmount = 0;
+    this.sellerLevel = sellerLevel;
+    this.salesCount = salesCount;
+    this.salesAmount = salesAmount;
   }
 
   public Seller(String username) {
     super(username);
   }
+
 
   public SellerDto.Read toRead() {
     long days = ChronoUnit.DAYS.between(getSignupDate(), LocalDate.now());

@@ -6,6 +6,7 @@ drop table product_iamge;
 drop table cart_item;
 drop table orders;
 drop table order_item;
+drop table email_verification;
 
 drop sequence product_seq;
 drop sequence image_seq;
@@ -17,6 +18,7 @@ create table account (
    password varchar2(60 char),
    email varchar2(30 char),
    signup_date date ,
+   role varchar2(10 char),
    constraint account_pk_username primary key(username)
 );
 
@@ -25,6 +27,7 @@ create table email_verification (
     code varchar2(10 char),
     send_at date,
     exprires_at date,
+    is_verify number(1),
     constraint email_verification_pk primary key(email)
 );
 
@@ -102,4 +105,3 @@ create table order_item (
 );
 
 create sequence orders_seq;
-

@@ -22,14 +22,14 @@ public class MemberController {
 
   @PreAuthorize("isAnonymous()")
   @Operation(summary= "일반회원 가입", description="일반회원 가입 및 프로필 사진 업로드")
-  @PostMapping("/api/member/new")
+  @PostMapping("/api/members/new")
   public ResponseEntity<Member> signup(@Valid MemberDto.Signup dto, BindingResult br) {
     return ResponseEntity.ok(service.signup(dto));
   }
 
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "내 정보 보기", description = "내 정보 보기")
-  @GetMapping("/api/member")
+  @GetMapping("/api/members")
   public ResponseEntity<MemberDto.Read> read(Principal principal) {
     MemberDto.Read dto = service.read(principal.getName());
     return ResponseEntity.ok(dto);
@@ -38,7 +38,7 @@ public class MemberController {
   // 프사 변경
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "프사 변경", description = "프사를 변경")
-  @PutMapping("/api/member/profile")
+  @PutMapping("/api/members/profile")
   public ResponseEntity<Void> changeProfile(@Valid MemberDto.changeProfile dto, BindingResult br, Principal principal) {
     service.changeProfile(dto, principal.getName());
     return ResponseEntity.ok(null);
