@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 
 import com.example.demo.exception.*;
-import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.context.*;
 import org.springframework.web.filter.*;
@@ -19,7 +18,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 	List<String> whitelist = Arrays.asList("/api/member", "/api/products/view");
 	
 	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+	protected boolean shouldNotFilter(HttpServletRequest request) {
 		if(request.getMethod().equals("OPTIONS"))
 			return true;
 		String path = request.getRequestURI();
@@ -42,11 +41,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 			Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 			String username = (String)claims.get("username");
 			String password = (String)claims.get("password");
-			String roleName = (String)claims.get("roleName");
-			System.out.println(username);
-			System.out.println(password);
-			System.out.println(roleName);
-			CustomUserDetails dto = new CustomUserDetails(username, password, roleName);
+			String role = (String)claims.get("role");
+			CustomUserDetails dto = new CustomUserDetails(username, password, role);
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto, password, dto.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(token);
 			filterChain.doFilter(request, response);

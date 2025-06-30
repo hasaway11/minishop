@@ -18,10 +18,10 @@ public class AuthController {
     return ResponseEntity.status(401).body(null);
   }
 
-  @GetMapping("/api/member/refresh")
+  @GetMapping("/api/refresh")
   public ResponseEntity<?> refresh(@RequestHeader("Authorization") String authHeader, String refreshToken, HttpServletResponse response) {
     if (refreshToken == null)
-      throw new CustomJWTException("NULL_REFRASH");
+      throw new CustomJWTException("NULL_REFRESH");
     if (authHeader == null || authHeader.length() < 7)
       throw new CustomJWTException("INVALID_STRING");
 
@@ -58,7 +58,6 @@ public class AuthController {
     try {
       JWTUtil.validateToken(token);
     } catch (CustomJWTException ex) {
-      System.out.println("1111111111111111111111111111111111111");
       if (ex.getMessage().equals("TOKEN_EXPIRED"))
         return true;
     }

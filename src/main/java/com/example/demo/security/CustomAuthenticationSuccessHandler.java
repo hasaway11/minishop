@@ -14,17 +14,11 @@ import java.util.*;
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
     CustomUserDetails user = (CustomUserDetails)authentication.getPrincipal();
     Map<String,Object> claims = user.getClaims();
-    System.out.println("======================================");
-    System.out.println(claims);
-    System.out.println("======================================");
-    String accessToken = JWTUtil.generateToken(claims, 10);
-    String refreshToken = JWTUtil.generateToken(claims, 1440);
-    claims.put("accessToken", accessToken);
-    claims.put("refreshToken", refreshToken);
-    System.out.println(claims);
+    claims.put("accessToken", JWTUtil.generateToken(claims, 10));
+    claims.put("refreshToken", JWTUtil.generateToken(claims, 1440));
     ResponseUtil.sendJsonResponse(response, 200, claims);
   }
 }

@@ -10,7 +10,6 @@ import com.example.demo.exception.*;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.*;
-import jakarta.servlet.http.*;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -30,9 +29,7 @@ public class JWTUtil {
 
 	public static Map<String,Object> validateToken(String token) {
 		try {
-			Map<String,Object> result =  Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
-			System.out.print(result);
-			return result;
+			return  Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
 		} catch (MalformedJwtException e) {
 			throw new CustomJWTException("잘못된 액세스 토큰 형식");
 		} catch (ExpiredJwtException e) {

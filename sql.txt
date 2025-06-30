@@ -25,8 +25,9 @@ create table account (
 create table email_verification (
     email varchar2(30 char),
     code varchar2(10 char),
-    send_at date,
-    exprires_at date,
+    create_at date,
+    exprire_at date,
+    is_verified number(1),
     is_verify number(1),
     constraint email_verification_pk primary key(email)
 );
