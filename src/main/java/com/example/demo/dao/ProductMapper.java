@@ -23,7 +23,7 @@ public interface ProductMapper {
 
   @SelectKey(statement="select product_seq.nextval from dual", keyProperty="productId", before=true, resultType=int.class)
   @Insert("insert into product values(#{productId}, #{name}, #{info}, #{price}, 0, 0, 0, 0, #{stock}, #{category})")
-  Product save(Product product);
+  void save(Product product);
 
   @Delete("delete from product where product_id=#{productId}")
   int delete(int pno);

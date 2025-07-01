@@ -21,8 +21,8 @@ public class ProductController {
     return ResponseEntity.ok(products);
   }
 
-  @GetMapping("/api/seller/products/{pno}")
-  public ResponseEntity<ProductDto.Read> read(@PathVariable int pno, Principal principal) {
+  @GetMapping("/api/products/{pno}")
+  public ResponseEntity<ProductDto.Read> read(@PathVariable int pno) {
     return ResponseEntity.ok(service.read(pno));
   }
 }

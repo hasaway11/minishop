@@ -10,7 +10,7 @@ public interface ProductImageMapper {
   @Select("select name from product_image where product_id=#{productId}")
   List<String> findByProductId(int productId);
 
-  @Insert("insert into product_image values(product_image_seq.nextvale, #{name}, #{productId})")
+  @Insert("insert into product_image values(product_image_seq.nextval, #{name}, #{productId})")
   void save(ProductImage productImage);
 
   @Delete("delete from product_iamge where product_id=#{productId}")

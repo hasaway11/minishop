@@ -41,10 +41,11 @@ public class ProductDto {
 
   @Data
   public static class Summary {
-    private Integer productId;
+    private Integer id;
     private String seller;
     private String name;
     private String image;
+    private Integer price;
     private Integer salesVolume;
     private Double star;
     private Integer reviewCount;

@@ -49,7 +49,7 @@ public class ImageUtil {
   }
 
   public static ResponseEntity<byte[]> getFile(String imageName) {
-    String folder = imageName.length()<20? PRODUCT_FOLDER : PROFILE_FOLDER;
+    String folder = imageName.length()<20? PROFILE_FOLDER : PRODUCT_FOLDER;
     File file = new File(folder, imageName);
     try {
       byte[] bytes = Files.readAllBytes(file.toPath());

@@ -19,13 +19,13 @@ public class Product {
   private Integer price;
   private Integer salesVolume;
   private Integer salesAmount;
-  private Integer totalStars;
+  private Integer totalStar;
   private Integer reviewCount;
   private Integer stock;
   private Integer category;
 
   public ProductDto.Read toRead(List<String> images) {
-    return new ProductDto.Read(productId, name, info, price, (double)totalStars/reviewCount, reviewCount, stock, images);
+    return new ProductDto.Read(productId, name, info, price, (double)totalStar/reviewCount, reviewCount, stock, images);
   }
 
   public void checkSellerOrThorw(String loginId) {

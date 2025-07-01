@@ -6,7 +6,7 @@ import java.util.*;
 
 @Data
 public class CategoryDto {
-  private Integer categoryId;
+  private int id;
   private String name;
   private List<CategoryDto> children;
 }

@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.dao.CategoryDao">
+<mapper namespace="com.example.demo.dao.CategoryMapper">
   <resultMap type="com.example.demo.dto.CategoryDto" id="mapForChild">
-	<id property="caterogyId" column="cid" />
+	<id property="id" column="cid" />
 	<result property="name" column="cname" />
   </resultMap>
 
   <resultMap type="com.example.demo.dto.CategoryDto" id="mapForParent">
-	<id property="caterogyId" column="pid" />
+	<id property="id" column="pid" />
 	<result property="name" column="pname" />
 	<collection property="children" javaType="java.util.ArrayList" resultMap="mapForChild" />
   </resultMap>
 
   <resultMap type="com.example.demo.dto.CategoryDto" id="mapForFindAll">
-	<id property="caterogyId" column="gid" />
+	<id property="id" column="gid" />
 	<result property="name" column="gname" />
 	<collection property="children" javaType="java.util.ArrayList" resultMap="mapForParent" />
   </resultMap>
 
   <select id="findAll" resultMap="mapForFindAll">
     <![CDATA[
-	  select g.caterogyId gid, g.name gname, p.caterogyId pid, p.name pname, c.caterogyId cid, c.name cname from category g
-	  left outer join category p on p.parent=g.cid
-	  left outer join category c on c.parent=p.cid where g.parent is null
+      select g.id gid, g.name gname, p.id pid, p.name pname, c.id cid, c.name cname from category g
+      left outer join category p on p.parent=g.id
+      left outer join category c on c.parent=p.id where g.parent is null
     ]]>
+  </select>
+
+  <select id="findByMinorCategory" resultType="com.example.demo.dto.CategoryDto">
+  <!--
+    오라클 전용이다. 일반적인 쿼리는
+    select * from ( SELECT LEVEL as depth, id, name, parent FROM category START WITH parent IS NULL CONNECT BY PRIOR id=parent ) where depth=3
+  -->
+    select LEVEL AS depth, id, name, parent from category where LEVEL = 3
+    start with parent is null connect by prior id = parent
   </select>
 </mapper>

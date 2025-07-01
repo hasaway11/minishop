@@ -8,4 +8,6 @@ import java.util.*;
 @Mapper
 public interface CategoryMapper {
   List<CategoryDto> findAll();
+
+  List<CategoryDto> findByMinorCategory();
 }

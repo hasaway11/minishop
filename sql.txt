@@ -1,6 +1,7 @@
 drop table account;
 drop table member;
 drop table seller;
+drop table category;
 drop table product;
 drop table product_iamge;
 drop table cart_item;
@@ -27,7 +28,6 @@ create table email_verification (
     code varchar2(10 char),
     create_at date,
     exprire_at date,
-    is_verified number(1),
     is_verify number(1),
     constraint email_verification_pk primary key(email)
 );
@@ -51,9 +51,16 @@ create table seller (
    constraint seller_pk_username primary key(username)
 );
 
+create table category (
+    id number(3) primary key,
+    name varchar2(10 char),
+    parent number(3)
+);
+
 create table product (
     product_id number(6),
-    name varchar2(10 char),
+    name varchar2(30 char),
+    seller varchar2(10 char),
     info clob,
     price number(7),
     sales_volume number(5),
@@ -106,3 +113,25 @@ create table order_item (
 );
 
 create sequence orders_seq;
+
+insert into category values(1, '간식', null);
+insert into category values(2, '즉석식품', null);
+
+insert into category values(11, '과자', 1);
+insert into category values(12, '빙과', 1);
+insert into category values(21, '라면', 2);
+insert into category values(22, '통조림', 2);
+
+insert into category values(111, '비스킷', 11);
+insert into category values(112, '샌드', 11);
+insert into category values(121, '콘아이스크림', 12);
+insert into category values(122, '바아이스크림', 12);
+insert into category values(211, '일반라면', 21);
+insert into category values(212, '비빔면', 21);
+insert into category values(221, '참치', 22);
+insert into category values(222, '햄', 22);
+
+commit;
+
+
+

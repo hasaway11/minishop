@@ -2,14 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.ProductMapper">
   <select id="findAllBySeller" resultType="com.example.demo.dto.ProductDto$Summary">
-	select pno, seller, name, price, (select name from product_image pi where pi.product_id=product_id and rownum=1) as image, sales_volume, review_count, total_stars/review_count as star from product
-    where seller=#{seller} order by pno desc
-	offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
+    SELECT p.product_id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count,
+    case when review_count=0 then 0 else total_star/review_count end as star, pi.name as image FROM product p LEFT JOIN
+    (
+      SELECT *
+      FROM ( SELECT pi.*, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_id) AS rn FROM product_image pi )
+      WHERE rn = 1
+    ) pi ON p.product_id = pi.product_id
+    where seller=#{seller} order by p.product_id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>
 
   <select id="findAll" resultType="com.example.demo.dto.ProductDto$Summary">
-      select pno, seller, name, price, (select name from product_image pi where pi.product_id=product_id and rownum=1) as image, sales_volume, review_count, total_stars/review_count as star from product
-      order by pno desc offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
+    SELECT p.product_id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count,
+    case when review_count=0 then 0 else total_star/review_count end as star, pi.name as image FROM product p LEFT JOIN
+    (
+      SELECT *
+      FROM ( SELECT pi.*, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_id) AS rn FROM product_image pi )
+      WHERE rn = 1
+    ) pi ON p.product_id = pi.product_id
+    order by p.product_id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>
 
   <update id="update">
