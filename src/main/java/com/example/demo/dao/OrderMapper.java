@@ -7,16 +7,19 @@ import java.util.*;
 
 @Mapper
 public interface OrderMapper {
-  @SelectKey(statement="select orders_seq.nextval from dual", keyProperty="orderId", before=true, resultType=int.class)
-  @Insert("insert into orders(order_id, username, order_date, status, order_total_price) values(#{orderId}, #{username}, #{orderDate}, #{status}, #{orderTotalPrice})")
+  @SelectKey(statement="select orders_seq.nextval from dual", keyProperty="id", before=true, resultType=int.class)
+  @Insert("insert into orders(id, username, order_date, status, order_total_price) values(#{id}, #{username}, #{orderDate}, #{status}, #{orderTotalPrice})")
   int save(Order order);
 
-  @Select("select * from orders where username=#{username} order by order_id desc")
+  @Select("select * from orders where username=#{username} order by id desc")
   List<Order> findByUsername(String username);
 
-  @Update("update orders set address=#{address}, status='PAY' where order_id=#{orderId}")
-  void updateOrder(int orderId, String address);
+  @Update("update orders set address=#{address} where id=#{id}")
+  void updateAddress(int id, String address);
 
-  @Select("select * from orders where order_id=#{orderId} and username=#{username}")
-  Optional<Order> findByIdAndUsername(Integer orderId, String loginId);
+  @Update("update orders set status=#{status} where id=#{id}")
+  void updateStatus(int id, OrderStatus status);
+
+  @Select("select * from orders where id=#{id} and username=#{username}")
+  Optional<Order> findByIdAndUsername(int id, String loginId);
 }

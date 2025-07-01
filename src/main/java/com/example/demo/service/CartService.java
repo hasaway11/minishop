@@ -17,7 +17,7 @@ public class CartService {
   private final ProductMapper productDao;
 
   private CartDto.Carts getCart(String loginId) {
-    List<CartDto.Summary> cartItems = cartDao.findCartItemByUsername(loginId);
+    List<CartDto.Summary> cartItems = cartDao.findByUsername(loginId);
     int cartTotalPrice = cartItems.stream().mapToInt(CartDto.Summary::getTotalPrice).sum();
     return new CartDto.Carts(cartItems, cartTotalPrice);
   }
@@ -64,7 +64,7 @@ public class CartService {
   }
 
   public CartDto.Carts delete(CartDto.Delete dto, String loginId) {
-    cartDao.delete(dto.getIds(), loginId);
+    cartDao.deleteByIds(dto.getIds(), loginId);
     return getCart(loginId);
   }
 }

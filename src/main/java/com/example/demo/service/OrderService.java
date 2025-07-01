@@ -6,6 +6,7 @@ import com.example.demo.entity.order.*;
 import com.example.demo.exception.*;
 import lombok.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
 import java.time.*;
 import java.util.*;
@@ -23,7 +24,6 @@ public class OrderService {
     Order order = Order.builder().username(loginId).orderAt(LocalDateTime.now()).status(OrderStatus.CREATE).orderTotalPrice(orderTotalPrice).build();
     orderDao.save(order);
     List<OrderItem> orderItems = new ArrayList<>();
-    int orderItemId = 1;
     for(CartDto.Summary item:cartSummaries) {
       OrderItem orderItem = new OrderItem(order.getOrderId(), item.getProductId(), item.getQuantity(), item.getTotalPrice());
       orderItems.add(orderItem);
@@ -32,20 +32,21 @@ public class OrderService {
     return order.getOrderId();
   }
 
-  public OrderDto.Orders read(Integer orderId, String loginId) {
-    Optional<Order> order =  orderDao.findByIdAndUsername(orderId, loginId);
+  public OrderDto.Orders read(Integer id, String loginId) {
+    Optional<Order> order =  orderDao.findByIdAndUsername(id, loginId);
     if(order.isEmpty())
       throw new JobFailException("유효하지 않은 주문입니다");
-    List<OrderDto.Item> orderItems = orderItemDao.findByOrderId(orderId);
+    List<OrderDto.Item> orderItems = orderItemDao.findById(id);
     return new OrderDto.Orders(order.get(), orderItems);
   }
 
-
-  public void order(Integer orderId, String address, String loginId) {
-    Optional<Order> order =  orderDao.findByIdAndUsername(orderId, loginId);
+  @Transactional
+  public void order(Integer id, String address, String loginId) {
+    Optional<Order> order =  orderDao.findByIdAndUsername(id, loginId);
     if(order.isEmpty())
       throw new JobFailException("유효하지 않은 주문입니다");
-    orderDao.updateOrder(orderId, address);
+    orderDao.updateAddress(id, address);
+    orderDao.updateStatus(id, OrderStatus.PAY);
   }
 
   public List<Order> orderList(String loginId) {
@@ -56,7 +57,7 @@ public class OrderService {
     Optional<Order> order = orderDao.findByIdAndUsername(orderId, loginId);
     if(order.isEmpty())
       throw new JobFailException("주문내역을 확인할 수 없습니다");
-    List<OrderDto.Item> orderItems = orderItemDao.findByOrderId(orderId);
+    List<OrderDto.Item> orderItems = orderItemDao.findById(orderId);
     return new OrderDto.Orders(order.get(), orderItems);
   }
 }

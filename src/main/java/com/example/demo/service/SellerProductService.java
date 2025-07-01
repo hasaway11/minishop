@@ -61,7 +61,7 @@ public class SellerProductService {
   public void delete(int productId, String loginId) {
     Product product = productDao.findById(productId).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
     product.checkSellerOrThorw(loginId);
-    productDao.delete(productId);
+    productDao.deleteById(productId);
     List<String> imageNames = productImageDao.findByProductId(productId);
     ImageUtil.deleteProductImages(imageNames);
     productImageDao.deleteByProductId(productId);

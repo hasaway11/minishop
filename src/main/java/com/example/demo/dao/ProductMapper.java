@@ -18,18 +18,18 @@ public interface ProductMapper {
   @Select("select count(*) from product")
   int count();
 
-  @Select("select * from product where product_id=#{productId}")
-  Optional<Product> findById(int pno);
+  @Select("select * from product where id=#{id}")
+  Optional<Product> findById(int id);
 
-  @SelectKey(statement="select product_seq.nextval from dual", keyProperty="productId", before=true, resultType=int.class)
-  @Insert("insert into product values(#{productId}, #{name}, #{info}, #{price}, 0, 0, 0, 0, #{stock}, #{category})")
+  @SelectKey(statement="select product_seq.nextval from dual", keyProperty="id", before=true, resultType=int.class)
+  @Insert("insert into product values(#{id}, #{name}, #{info}, #{price}, 0, 0, 0, 0, #{stock}, #{category})")
   void save(Product product);
 
-  @Delete("delete from product where product_id=#{productId}")
-  int delete(int pno);
+  @Delete("delete from product where id=#{id}")
+  int deleteById(int id);
 
   int update(ProductDto.Update dto);
 
-  @Select("select case where stock>0 then true else false end from product where product_id=#{productId}")
-  boolean hasStock(Integer productId);
+  @Select("select case where stock>0 then true else false end from product where id=#{id}")
+  boolean hasStock(int productId);
 }

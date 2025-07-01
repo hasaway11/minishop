@@ -8,11 +8,13 @@ drop table cart_item;
 drop table orders;
 drop table order_item;
 drop table email_verification;
+drop table review;
 
 drop sequence product_seq;
 drop sequence image_seq;
 drop sequence cart_item_seq;
 drop sequence orders_seq;
+drop sequence review_seq;
 
 create table account (
    username varchar2(10 char),
@@ -29,7 +31,7 @@ create table email_verification (
     create_at date,
     exprire_at date,
     is_verify number(1),
-    constraint email_verification_pk primary key(email)
+    constraint email_verification_pk_email primary key(email)
 );
 
 create table member (
@@ -58,7 +60,7 @@ create table category (
 );
 
 create table product (
-    product_id number(6),
+    id number(6),
     name varchar2(30 char),
     seller varchar2(10 char),
     info clob,
@@ -69,31 +71,31 @@ create table product (
     review_count number(5),
     stock number(3),
     category number(3),
-    constraint product_pk primary key(product_id)
+    constraint product_pk primary key(id)
 );
 
 create table product_image (
-    image_id number(7),
+    id number(7),
     name varchar2(41 char),
     product_id number(6),
-    constraint image_pk primary key(image_id)
+    constraint image_pk primary key(id)
 );
 
 create sequence product_seq;
 create sequence product_image_seq;
 
 create table cart_item (
-  cart_item_id number(7),
-  username varchar2(10 char),
-  product_id number(6),
-  quantity number(2),
-  constraint cart_item_pk primary key(cart_item_id)
+    id number(7),
+    username varchar2(10 char),
+    product_id number(6),
+    quantity number(2),
+    constraint cart_item_pk primary key(id)
 );
 
 create sequence cart_item_seq;
 
 create table orders (
-  order_id number(7),
+  id number(7),
   username varchar2(10 char),
   address varchar2(50 char),
   order_at date,
@@ -101,7 +103,7 @@ create table orders (
   cancel_at date,
   status varchar2(10 char),
   order_total_price number(10),
-  constraint order_pk primary key(order_id)
+  constraint order_pk primary key(id)
 );
 
 create table order_item (
@@ -109,10 +111,22 @@ create table order_item (
   product_id number(6),
   quantity number(2),
   total_price number(10),
+  review_writable number(1)
   constraint order_item_pk primary key(order_id, product_id)
 );
 
 create sequence orders_seq;
+
+create table review (
+  id number(7),
+  writer varchar2(10 char),
+  content varchar2(100 char),
+  star number(1),
+  write_date date,
+  constraint review_pk primary key(id)
+);
+
+create sequence review_seq;
 
 insert into category values(1, '간식', null);
 insert into category values(2, '즉석식품', null);
