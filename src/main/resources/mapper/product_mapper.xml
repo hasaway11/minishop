@@ -2,25 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.ProductMapper">
   <select id="findAllBySeller" resultType="com.example.demo.dto.ProductDto$Summary">
-    SELECT p.product_id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count,
+    SELECT p.id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count,
     case when review_count=0 then 0 else total_star/review_count end as star, pi.name as image FROM product p LEFT JOIN
     (
       SELECT *
       FROM ( SELECT pi.*, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_id) AS rn FROM product_image pi )
       WHERE rn = 1
-    ) pi ON p.product_id = pi.product_id
-    where seller=#{seller} order by p.product_id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
+    ) pi ON p.id = pi.product_id
+    where seller=#{seller} order by p.id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>
 
   <select id="findAll" resultType="com.example.demo.dto.ProductDto$Summary">
-    SELECT p.product_id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count,
+    SELECT p.id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count,
     case when review_count=0 then 0 else total_star/review_count end as star, pi.name as image FROM product p LEFT JOIN
     (
       SELECT *
       FROM ( SELECT pi.*, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_id) AS rn FROM product_image pi )
       WHERE rn = 1
-    ) pi ON p.product_id = pi.product_id
-    order by p.product_id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
+    ) pi ON p.id = pi.product_id
+    order by p.id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
+  </select>
+
+  <select id="count" resultType="int">
+    select count(*) from product
+    <where>
+      <if test="seller != null">seller = #{seller} </if>
+    </where>
   </select>
 
   <update id="update">
@@ -29,6 +36,33 @@
       <if test="dto.info!=null">info=#{dto.info},</if>
       <if test="dto.stock!=null">stock=#{dto.stock},</if>
     </trim>
-    where pno=#{dto.pno}
+    where id=#{dto.id}
   </update>
+
+  <resultMap id="productMap" type="com.example.demo.dto.ProductDto$Read">
+    <id property="id" column="id" />
+    <result property="name" column="name" />
+    <result property="info" column="info" />
+    <result property="price" column="price" />
+    <result property="reviewCount" column="review_count" />
+    <result property="stock" column="stock" />
+    <result property="seller" column="seller" />
+    <result property="star" column="star" />
+    <collection property="images" ofType="string" javaType="java.util.List">
+      <result property="image" column="image" />
+    </collection>
+    <collection property="reviews" ofType="com.example.demo.entity.product.Review" javaType="java.util.List">
+      <id property="id" column="rid" />
+      <result property="writer" column="writer" />
+      <result property="content" column="content" />
+      <result property="star" column="star" />
+      <result property="writeDate" column="write_date" />
+    </collection>
+  </resultMap>
+  <select id="findById" resultMap="productMap">
+    select p.id, p.name, p.info, p.price, p.review_count, p.stock, p.seller,
+      case when p.review_count=0 then 0 else p.total_star/p.review_count end as star,
+      '${url}'||pi.name as image, r.id as rid, r.writer, r.content, r.star, r.write_date from product p join product_image pi on
+      p.id=pi.product_id join review r on p.id=r.product_id where p.id=#{id}
+  </select>
 </mapper>

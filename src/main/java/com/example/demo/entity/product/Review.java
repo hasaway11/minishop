@@ -13,4 +13,5 @@ public class Review {
   private String content;
   private Integer star;
   private LocalDate writeDate;
+  private Integer productId;
 }

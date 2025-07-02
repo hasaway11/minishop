@@ -24,10 +24,6 @@ public class Product {
   private Integer stock;
   private Integer category;
 
-  public ProductDto.Read toRead(List<String> images) {
-    return new ProductDto.Read(productId, name, info, price, (double)totalStar/reviewCount, reviewCount, stock, images);
-  }
-
   public void checkSellerOrThorw(String loginId) {
     if(!seller.equals(loginId))
       throw new JobFailException("작업을 수행할 수 없습니다");

@@ -42,28 +42,29 @@ public class SellerProductService {
 
   @Transactional(readOnly=true)
   public ProductDto.Read read(int productId, String loginId) {
-    Product product = productDao.findById(productId).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
-    List<String> imageNames = productImageDao.findByProductId(productId);
-    product.checkSellerOrThorw(loginId);
-    return product.toRead(imageNames);
+//    Product product = productDao.findById(productId).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+//    List<String> imageNames = productImageDao.findByProductId(productId);
+//    product.checkSellerOrThorw(loginId);
+//    return product.toRead(imageNames);
+    return null;
   }
 
   @Transactional
   public void update(ProductDto.Update dto, String loginId) {
-    Product product = productDao.findById(dto.getProductId()).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
-    product.checkSellerOrThorw(loginId);
+    //Product product = productDao.findById(dto.getProductId()).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+    //product.checkSellerOrThorw(loginId);
     // 가격 변경은 기준 시점을 정확히 정해두는 것이 바람직
     // 가격 정보는 redis에 캐시. 가격 정보를 변경하면 정해진 시간에 cache를 invalidate
-    productDao.update(dto);
+    //productDao.update(dto);
   }
 
   @Transactional
   public void delete(int productId, String loginId) {
-    Product product = productDao.findById(productId).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
-    product.checkSellerOrThorw(loginId);
-    productDao.deleteById(productId);
-    List<String> imageNames = productImageDao.findByProductId(productId);
-    ImageUtil.deleteProductImages(imageNames);
-    productImageDao.deleteByProductId(productId);
+//    Product product = productDao.findById(productId).orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+//    product.checkSellerOrThorw(loginId);
+//    productDao.deleteById(productId);
+//    List<String> imageNames = productImageDao.findByProductId(productId);
+//    ImageUtil.deleteProductImages(imageNames);
+//    productImageDao.deleteByProductId(productId);
   }
 }

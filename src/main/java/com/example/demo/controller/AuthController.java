@@ -18,32 +18,22 @@ public class AuthController {
     return ResponseEntity.status(401).body(null);
   }
 
-  @GetMapping("/api/refresh")
-  public ResponseEntity<?> refresh(@RequestHeader("Authorization") String authHeader, String refreshToken, HttpServletResponse response) {
+  @PostMapping("/api/refresh")
+  public ResponseEntity<?> refresh(String refreshToken, HttpServletResponse response) {
     if (refreshToken == null)
       throw new CustomJWTException("NULL_REFRESH");
-    if (authHeader == null || authHeader.length() < 7)
-      throw new CustomJWTException("INVALID_STRING");
-
-    String accessToken = authHeader.substring(7);
-
-    // Access 토큰이 만료되지 않았다면
-    if (!checkExpiredToken(accessToken, response))
-      return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
-
     // Refresh토큰 검증
     try {
       Map<String,Object> claims = JWTUtil.validateToken(refreshToken);
       String newAccessToken = JWTUtil.generateToken(claims, 10);
-      String newRefreshToken = checkTime((Integer) claims.get("exp")) ? JWTUtil.generateToken(claims, 60 * 24) : refreshToken;
-      return ResponseEntity.ok(Map.of("newAccessToken", newAccessToken, "newRefreshToken", newRefreshToken));
+      return ResponseEntity.ok(newAccessToken);
     } catch(CustomJWTException e) {
       return ResponseEntity.status(401).body("LOGIN_REQUIRED");
     }
   }
 
   // 시간이 1시간 미만으로 남았다면
-  private boolean checkTime(Integer exp) {
+  private boolean checkTime(Long exp) {
     // JWT exp를 날짜로 변환
     Date expDate = new Date((long) exp * (1000));
     // 현재 시간과의 차이 계산 - 밀리세컨즈

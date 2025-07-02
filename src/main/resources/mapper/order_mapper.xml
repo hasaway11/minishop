@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.OrderMapper">
   <resultMap id="mapForRead" type="com.example.demo.dto.OrderDto$Orders">
-    <id property="orderId" column="order_id" />
+    <id property="id" column="id" />
     <result property="orderDate" column="order_date" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP" />
     <result property="status" column="status" />
     <result property="orderTotalPrice" column="order_total_price" />
@@ -15,8 +15,8 @@
     </collection>
   </resultMap>
   <select id="findById" resultMap="mapForRead">
-    select o.order_id, o.order_date, o.status, o.order_total_price, oi.quantity, oi.total_price, p.name, p.image
-    from orders o join order_item oi on o.order_id=oi.order_id join product p on oi.product_id=p.product_id
-    where o.order_id=#{orderId}
+    select o.id, o.order_date, o.status, o.order_total_price, oi.quantity, oi.total_price, p.name, p.image
+    from orders o join order_item oi on o.id=oi.order_id join product p on oi.product_id=p.id
+    where o.id=#{id}
   </select>
 </mapper>

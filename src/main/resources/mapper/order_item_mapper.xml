@@ -4,8 +4,8 @@
   <insert id="save">
     insert all
     <foreach collection="list" item="item">
-      into order_item(order_id, product_id, quantity, total_price)
-      values (#{orderId}, #{productId}, #{quantity}, #{totalPrice})
+      into order_item(order_id, product_id, quantity, total_price, review_writable )
+      values (#{orderId}, #{productId}, #{quantity}, #{totalPrice}, #{reviewWritable})
     </foreach>
     select * from dual
   </insert>

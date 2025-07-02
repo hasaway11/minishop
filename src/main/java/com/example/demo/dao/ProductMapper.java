@@ -15,11 +15,9 @@ public interface ProductMapper {
   @Select("select count(*) from product where seller=#{seller}")
   int countBySeller(String seller);
 
-  @Select("select count(*) from product")
-  int count();
+  int count(String seller);
 
-  @Select("select * from product where id=#{id}")
-  Optional<Product> findById(int id);
+  Optional<ProductDto.Read> findById(int id, String url);
 
   @SelectKey(statement="select product_seq.nextval from dual", keyProperty="id", before=true, resultType=int.class)
   @Insert("insert into product values(#{id}, #{name}, #{info}, #{price}, 0, 0, 0, 0, #{stock}, #{category})")

@@ -52,15 +52,18 @@ public class ProductDto {
   }
 
   @AllArgsConstructor
+  @NoArgsConstructor
   @Data
   public static class Read {
-    private Integer productId;
+    private Integer id;
     private String name;
     private String info;
     private Integer price;
-    private Double star;
     private Integer reviewCount;
     private Integer stock;
+    private String seller;
+    private Double star;
     private List<String> images;
+    private List<Review> reviews;
   }
 }

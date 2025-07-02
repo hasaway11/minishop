@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.CartDao">
   <delete id="delete">
-    delete from cart where cart_item_id in
+    delete from cart where id in
 	<foreach collection="list" item="item" open="(" close=")" separator=",">
       #{item}
 	</foreach>
@@ -10,7 +10,8 @@
   </delete>
 
   <select id="findSelectedCartItems" resultType="com.example.demo.dto.CartDto$Summary">
-    select c.product_id, c.name, c.quantity, c.quantity*p.price from cartitem c join product p where c.username=#{username} and cart_item_in in
+    select c.id, c.name, c.quantity, c.quantity*p.price from cartitem c join product p on c.product_id=p.id
+    where c.username=#{username} and c.id in
     <foreach collection="list" item="item" open="(" close=")" separator=",">
       #{item}
 	</foreach>

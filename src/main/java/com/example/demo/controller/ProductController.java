@@ -7,8 +7,6 @@ import org.springframework.http.*;
 import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.*;
-
 @RequiredArgsConstructor
 @Validated
 @RestController
@@ -16,13 +14,13 @@ public class ProductController {
   private final ProductService service;
 
   @GetMapping("/api/products")
-  public ResponseEntity<PageResponse<ProductDto.Summary>> findSummaries(@RequestParam(defaultValue="1") int pageno) {
-    PageResponse<ProductDto.Summary> products = service.findSummaries(pageno);
-    return ResponseEntity.ok(products);
+  public ResponseEntity<PageResponse<ProductDto.Summary>> findSummaries(@RequestParam(defaultValue="1") int pageno, @RequestParam(defaultValue="") String seller) {
+    return ResponseEntity.ok(service.findSummaries(pageno, seller));
   }
 
-  @GetMapping("/api/products/{pno}")
-  public ResponseEntity<ProductDto.Read> read(@PathVariable int pno) {
-    return ResponseEntity.ok(service.read(pno));
+  @GetMapping("/api/products/{id}")
+  public ResponseEntity<ProductDto.Read> read(@PathVariable int id) {
+    System.out.println(service.read(id));
+    return ResponseEntity.ok(service.read(id));
   }
 }

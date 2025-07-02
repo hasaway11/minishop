@@ -24,14 +24,14 @@ public class OrderDto {
 
   @Data
   public static class Orders {
-    private Integer orderId;
+    private Integer id;
     private LocalDateTime displayTime;
     private OrderStatus status;
     private Integer orderTotalPrice;
     private List<OrderDto.Item> orderItems;
 
     public Orders(Order order, List<OrderDto.Item> orderItems) {
-      this.orderId = order.getOrderId();
+      this.id = order.getOrderId();
       this.status = order.getStatus();
       this.orderTotalPrice = order.getOrderTotalPrice();
       this.orderItems = orderItems;

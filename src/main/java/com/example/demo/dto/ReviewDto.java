@@ -19,7 +19,7 @@ public class ReviewDto {
     private Integer productId;
 
     public Review toReview(String loginId) {
-      return new Review(null, content, loginId, star, LocalDate.now());
+      return null;
     }
   }
 
