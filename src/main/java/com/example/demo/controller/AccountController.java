@@ -27,7 +27,7 @@ public class AccountController {
 
   @PreAuthorize("isAnonymous()")
   @Operation(summary= "아이디 확인", description="아이디가 사용가능한 지 확인")
-  @GetMapping("/api/accounts/check-username")
+  @GetMapping("/api/accounts/check-id")
   public ResponseEntity<String> idAvailable(@Valid AccountDto.UsernameCheck dto, BindingResult br) {
     boolean result = service.idAvailable(dto);
     if (result) return ResponseEntity.ok("사용가능한 아이디입니다");

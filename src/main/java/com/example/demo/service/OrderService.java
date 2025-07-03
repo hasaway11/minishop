@@ -25,7 +25,7 @@ public class OrderService {
     orderDao.save(order);
     List<OrderItem> orderItems = new ArrayList<>();
     for(CartDto.Summary item:cartSummaries) {
-      OrderItem orderItem = new OrderItem(order.getOrderId(), item.getProductId(), item.getQuantity(), item.getTotalPrice(), true);
+      OrderItem orderItem = new OrderItem(order.getOrderId(), item.getId(), item.getQuantity(), item.getTotalPrice(), true);
       orderItems.add(orderItem);
     }
     orderItemDao.save(orderItems);

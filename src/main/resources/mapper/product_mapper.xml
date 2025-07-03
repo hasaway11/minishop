@@ -63,6 +63,6 @@
     select p.id, p.name, p.info, p.price, p.review_count, p.stock, p.seller,
       case when p.review_count=0 then 0 else p.total_star/p.review_count end as star,
       '${url}'||pi.name as image, r.id as rid, r.writer, r.content, r.star, r.write_date from product p join product_image pi on
-      p.id=pi.product_id join review r on p.id=r.product_id where p.id=#{id}
+      p.id=pi.product_id left outer join review r on p.id=r.product_id where p.id=#{id}
   </select>
 </mapper>

@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CartItem {
-  private Integer cartItemId;
+  private Integer id;
   private String username;
   private Integer productId;
   private Integer quantity;

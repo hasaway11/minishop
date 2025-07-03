@@ -24,15 +24,12 @@ public class MemberDto {
     @Email(message="잘못된 이메일입니다")
     private String email;
     @NotNull(message="생일은 필수입력입니다")
-    private LocalDate birthday;
+    private LocalDate birthDate;
     private MultipartFile profile;
-    @NotEmpty(message="확인코드는 필수입력입니다")
-    @Pattern(regexp="^[a-zA-Z0-9]{10}$", message="확인코드는 영숫자 10자입니다")
-    private String code;
 
     public Member toEntity(PasswordEncoder passwordEncoder) {
       String encodedPassword = passwordEncoder.encode(password);
-      return new Member(username, encodedPassword, email, "MEMBER", birthday, null, MemberLevel.NORMAL);
+      return new Member(username, encodedPassword, email, "MEMBER", birthDate, null, MemberLevel.NORMAL);
     }
   }
 

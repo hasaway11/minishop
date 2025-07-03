@@ -28,6 +28,6 @@ public interface ProductMapper {
 
   int update(ProductDto.Update dto);
 
-  @Select("select case where stock>0 then true else false end from product where id=#{id}")
-  boolean hasStock(int productId);
+  @Select("select stock from product where id=#{id}")
+  int findStockById(int id);
 }

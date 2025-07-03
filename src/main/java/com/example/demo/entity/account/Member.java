@@ -7,6 +7,7 @@ import java.time.*;
 import java.time.temporal.*;
 
 @Getter
+@NoArgsConstructor
 public class Member extends Account {
   private LocalDate birthDate;
   @Setter private String profile;

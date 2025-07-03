@@ -30,7 +30,6 @@ public class MemberService {
     member.setProfile(profileName);
     accountDao.save(member);
     memberDao.save(member);
-    emailVerificationDao.deleteById(dto.getEmail());
     return memberDao.findById(dto.getUsername()).get();
   }
 

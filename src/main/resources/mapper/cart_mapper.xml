@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.dao.CartDao">
-  <delete id="delete">
-    delete from cart where id in
-	<foreach collection="list" item="item" open="(" close=")" separator=",">
+<mapper namespace="com.example.demo.dao.CartMapper">
+  <select id="findByUsername" resultType="com.example.demo.dto.CartDto$Summary">
+    select c.id, '${url}'||pi.name as image, p.name, c.quantity, c.quantity*p.price as totalPrice from cart_item c
+    join product p on c.product_id=p.id join
+    (
+      SELECT * FROM
+      ( SELECT pi.*, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_id) AS rn FROM product_image pi )
+      WHERE rn = 1
+    ) pi on p.id=pi.product_id where c.username=#{username}
+  </select>
+
+  <select id="findByIdIn" resultType="com.example.demo.entity.order.CartItem">
+    select * from cart_item c where  c.id in
+    <foreach collection="ids" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </select>
+
+  <delete id="deleteAll">
+    delete from cart_item c where c.id in
+	<foreach collection="ids" item="item" open="(" close=")" separator=",">
       #{item}
 	</foreach>
-	and username=#{username}
   </delete>
 
-  <select id="findSelectedCartItems" resultType="com.example.demo.dto.CartDto$Summary">
-    select c.id, c.name, c.quantity, c.quantity*p.price from cartitem c join product p on c.product_id=p.id
-    where c.username=#{username} and c.id in
-    <foreach collection="list" item="item" open="(" close=")" separator=",">
-      #{item}
-	</foreach>
-  </select>
+
 </mapper>

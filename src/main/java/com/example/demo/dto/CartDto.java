@@ -8,12 +8,11 @@ import java.util.*;
 public class CartDto {
   @Data
   public static class Summary {
-    private Integer productId;
+    private Integer id;
+    private String image;
     private String name;
     private Integer quantity;
     private Integer totalPrice;
-    private String image;
-    private int stock;
   }
 
   @Data

@@ -32,6 +32,6 @@ public class ProductService {
   }
 
   public ProductDto.Read read(int id) {
-    return productDao.findById(id, "/api/images/").orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+    return productDao.findById(id, "http://localhost:8080/api/images/").orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
   }
 }
