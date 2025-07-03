@@ -23,7 +23,10 @@ public class CartDto {
   }
 
   @Data
-  public static class Delete {
-    private List<Integer> ids;
+  public static class CheckoutDto {
+    private Integer productId;
+    private String username;
+    private Integer quantity;
+    private Integer totalPrice;
   }
 }

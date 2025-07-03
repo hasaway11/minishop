@@ -9,11 +9,6 @@ import java.util.*;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class OrderDto {
   @Data
-  public static class OrderList {
-    List<Integer> list;
-  }
-
-  @Data
   public static class Item {
     private Integer productId;
     private String name;

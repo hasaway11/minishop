@@ -19,15 +19,16 @@ public class OrderService {
   private final OrderItemMapper orderItemDao;
 
   public int prepareOrder(List<Integer> selectedCartItemIds, String loginId) {
-    List<CartDto.Summary> cartSummaries = cartDao.findSelectedCartItems(selectedCartItemIds, loginId);
-    int orderTotalPrice = cartSummaries.stream().mapToInt(CartDto.Summary::getTotalPrice).sum();
+    List<CartDto.CheckoutDto> selectedCartItems =  cartDao.findSelectedCartItems(selectedCartItemIds);
+    boolean containsItemNotOwnedByUser = selectedCartItems.stream().anyMatch(item->!item.getUsername().equals(loginId));
+    if (containsItemNotOwnedByUser)
+      throw new JobFailException("잘못된 작업입니다.");
+    int orderTotalPrice = selectedCartItems.stream().mapToInt(CartDto.CheckoutDto::getTotalPrice).sum();
+
     Order order = Order.builder().username(loginId).orderAt(LocalDateTime.now()).status(OrderStatus.CREATE).orderTotalPrice(orderTotalPrice).build();
     orderDao.save(order);
-    List<OrderItem> orderItems = new ArrayList<>();
-    for(CartDto.Summary item:cartSummaries) {
-      OrderItem orderItem = new OrderItem(order.getOrderId(), item.getId(), item.getQuantity(), item.getTotalPrice(), true);
-      orderItems.add(orderItem);
-    }
+
+    List<OrderItem> orderItems = selectedCartItems.stream().map(item->new OrderItem(order.getOrderId(), item)).toList();
     orderItemDao.save(orderItems);
     return order.getOrderId();
   }

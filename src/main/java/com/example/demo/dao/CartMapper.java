@@ -26,7 +26,7 @@ public interface CartMapper {
   @Update("update cart_item set quantity=quantity-1 where id=#{id}")
   int decreaseQuantity(int id);
 
-  List<CartDto.Summary> findSelectedCartItems(List<Integer> selectedCartItemIds, String username);
+  List<CartDto.CheckoutDto> findSelectedCartItems(List<Integer> ids);
 
   @Delete("delete from cart_item where id=#{id}")
   int deleteById(int id);

@@ -8,9 +8,9 @@ import java.util.*;
 
 @Mapper
 public interface ProductMapper {
-  List<ProductDto.Summary> findAllBySeller(int pageno, int pagesize, String seller);
+  List<ProductDto.Summary> findAllBySeller(int pageno, int pagesize, String seller, String url);
 
-  List<ProductDto.Summary> findAll(int pageno, int pagesize);
+  List<ProductDto.Summary> findAll(int pageno, int pagesize, String url);
 
   @Select("select count(*) from product where seller=#{seller}")
   int countBySeller(String seller);

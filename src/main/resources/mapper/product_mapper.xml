@@ -2,24 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.ProductMapper">
   <select id="findAllBySeller" resultType="com.example.demo.dto.ProductDto$Summary">
-    SELECT p.id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count,
-    case when review_count=0 then 0 else total_star/review_count end as star, pi.name as image FROM product p LEFT JOIN
-    (
-      SELECT *
-      FROM ( SELECT pi.*, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_id) AS rn FROM product_image pi )
-      WHERE rn = 1
-    ) pi ON p.id = pi.product_id
+    SELECT p.id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count, case when review_count=0 then 0 else total_star/review_count end as star,
+    '${url}'||(select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image from product p
     where seller=#{seller} order by p.id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>
 
   <select id="findAll" resultType="com.example.demo.dto.ProductDto$Summary">
-    SELECT p.id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count,
-    case when review_count=0 then 0 else total_star/review_count end as star, pi.name as image FROM product p LEFT JOIN
-    (
-      SELECT *
-      FROM ( SELECT pi.*, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY product_id) AS rn FROM product_image pi )
-      WHERE rn = 1
-    ) pi ON p.id = pi.product_id
+    SELECT p.id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count, case when review_count=0 then 0 else total_star/review_count end as star,
+    '${url}'||(select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image from product p
     order by p.id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>
 

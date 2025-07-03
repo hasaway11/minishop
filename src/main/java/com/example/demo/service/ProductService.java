@@ -22,10 +22,10 @@ public class ProductService {
     List<ProductDto.Summary> products = null;
     int totalCount = 0;
     if("".equals(seller)) {
-      products = productDao.findAll(pageno, PAGE_SIZE);
+      products = productDao.findAll(pageno, PAGE_SIZE, "http://localhost:8080/api/images/");
       totalCount = productDao.count(null);
     } else {
-      products = productDao.findAllBySeller(pageno, PAGE_SIZE, seller);
+      products = productDao.findAllBySeller(pageno, PAGE_SIZE, seller, "http://localhost:8080/api/images/");
       totalCount = productDao.count(seller);
     }
     return new PageResponse<>(products, pageno, PAGE_SIZE, totalCount);
