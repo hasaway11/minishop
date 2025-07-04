@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.OrderMapper">
-  <resultMap id="mapForRead" type="com.example.demo.dto.OrderDto$Orders">
-    <id property="id" column="id" />
-    <result property="orderDate" column="order_date" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP" />
-    <result property="status" column="status" />
-    <result property="orderTotalPrice" column="order_total_price" />
-    <collection property="orders" ofType="com.example.demo.dto.OrderDto$Item" javaType="java.util.List">
-      <id property="productId" column="product_id" />
-      <result property="name" column="name" />
-      <result property="image" column="image" />
-      <result property="quantity" column="quantity" />
-      <result property="totalPrice" column="total_price" />
-    </collection>
-  </resultMap>
-  <select id="findById" resultMap="mapForRead">
-    select o.id, o.order_date, o.status, o.order_total_price, oi.quantity, oi.total_price, p.name, p.image
-    from orders o join order_item oi on o.id=oi.order_id join product p on oi.product_id=p.id
-    where o.id=#{id}
+
+  <select id="findByUsername" resultType="com.example.demo.dto.OrderDto$Summary">
+    select o.address, o.paid_at as orderTime, o.status, o.order_total_price,
+      (select count(*) from order_item oi where oi.order_id=o.id) as count,
+      (select name from product where id=(select product_id from order_item oi where oi.order_id=o.id and rownum=1)) as name
+    from orders o where username=#{username}
   </select>
 </mapper>

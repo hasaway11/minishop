@@ -5,8 +5,13 @@
     insert all
     <foreach collection="list" item="item">
       into order_item(order_id, product_id, quantity, total_price, review_writable )
-      values (#{orderId}, #{productId}, #{quantity}, #{totalPrice}, #{reviewWritable})
+      values (#{item.orderId}, #{item.productId}, #{item.quantity}, #{item.totalPrice}, #{item.reviewWritable})
     </foreach>
     select * from dual
   </insert>
+
+  <select id="findByOrderId" resultType="com.example.demo.dto.OrderDto$Item">
+    select oi.product_id, p.name, '${url}'|| (select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image,
+    oi.quantity, oi.total_price from order_item oi join product p on oi.product_id=p.id where oi.order_id=#{orderId}
+  </select>
 </mapper>

@@ -23,10 +23,19 @@ public class CartDto {
   }
 
   @Data
-  public static class CheckoutDto {
-    private Integer productId;
-    private String username;
+  public static class CheckOutItem {
+    private Integer id;
+    private String name;
+    private String image;
     private Integer quantity;
     private Integer totalPrice;
+    private String username;
+  }
+
+  @Data
+  @AllArgsConstructor
+  public static class CheckOut {
+    private Integer orderTotalPrice;
+    private List<CartDto.CheckOutItem> items;
   }
 }

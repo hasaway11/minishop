@@ -23,7 +23,7 @@ public class SellerProductService {
 
   @Transactional(readOnly=true)
   public PageResponse<ProductDto.Summary> findBySeller(int pageno, String seller) {
-    List<ProductDto.Summary> products = productDao.findAllBySeller(pageno, PAGE_SIZE, seller);
+    List<ProductDto.Summary> products = productDao.findAllBySeller(pageno, PAGE_SIZE, seller, "http://localhost:8080/api/images/");
     int totalCount = productDao.countBySeller(seller);
     return new PageResponse<>(products, pageno, PAGE_SIZE, totalCount);
   }

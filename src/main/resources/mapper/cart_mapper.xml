@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.CartMapper">
+
   <select id="findByUsername" resultType="com.example.demo.dto.CartDto$Summary">
     select c.id, '${url}'||(select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image, p.name, c.quantity, c.quantity*p.price as totalPrice
     from cart_item c join product p on c.product_id=p.id where c.username=#{username}
@@ -13,8 +14,11 @@
 	</foreach>
   </delete>
 
-  <select id="findSelectedCartItems" resultMap="com.example.demo.dto.CartDto$CheckoutDto">
-    select c.product_id, c.quantity, c.quantity*p.price as totalPrice, c.username from cart_item c join product p on c.product_id=p.id where  c.id in
+  <select id="findSelectedCartItems" resultType="com.example.demo.entity.order.TempOrder">
+    select c.id as cart_item_id, c.username, c.product_id, p.name,
+    '${url}'||(select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image,
+    c.quantity, c.quantity*p.price as totalPrice from cart_item c join product p on c.product_id=p.id
+    where  c.id in
     <foreach collection="ids" item="item" open="(" close=")" separator=",">
       #{item}
     </foreach>

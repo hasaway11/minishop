@@ -5,6 +5,7 @@ drop table category;
 drop table product;
 drop table product_iamge;
 drop table cart_item;
+create table temp_orders
 drop table orders;
 drop table order_item;
 drop table email_verification;
@@ -13,6 +14,7 @@ drop table review;
 drop sequence product_seq;
 drop sequence image_seq;
 drop sequence cart_item_seq;
+drop sequence temp_orders_seq;
 drop sequence orders_seq;
 drop sequence review_seq;
 
@@ -94,9 +96,24 @@ create table cart_item (
 
 create sequence cart_item_seq;
 
+create table temp_orders (
+  temp_id number(7),
+  cart_id number(7),
+  username varchar2(10 char),
+  product_id number(7),
+  name varchar2(30 char),
+  image varchar2(41 char),
+  quantity number(2),
+  total_price number(7),
+  constraint temp_orders_pk primary key(cart_id)
+);
+
+create sequence temp_orders_seq;
+
 create table orders (
   id number(7),
   username varchar2(10 char),
+  zipcode varchar2(5 char),
   address varchar2(50 char),
   order_at date,
   paid_at date,

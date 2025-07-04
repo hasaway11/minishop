@@ -9,7 +9,7 @@ import java.time.*;
 @NoArgsConstructor
 @Builder
 public class Order {
-  private Integer orderId;
+  private Integer id;
   private String username;
   private LocalDateTime orderAt;
   private LocalDateTime paidAt;
