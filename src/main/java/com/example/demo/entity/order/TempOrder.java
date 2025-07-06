@@ -4,8 +4,9 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class TempOrder {
-  private int id;
+  private int tempId;
   private int cartItemId;
   private String username;
   private int productId;

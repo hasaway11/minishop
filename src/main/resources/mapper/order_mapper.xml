@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.OrderMapper">
-
   <select id="findByUsername" resultType="com.example.demo.dto.OrderDto$Summary">
-    select o.address, o.paid_at as orderTime, o.status, o.order_total_price,
+    select o.id, o.order_at as orderTime, o.status,
       (select count(*) from order_item oi where oi.order_id=o.id) as count,
       (select name from product where id=(select product_id from order_item oi where oi.order_id=o.id and rownum=1)) as name
     from orders o where username=#{username}
+  </select>
+
+  <select id="findById" resultType="com.example.demo.dto.OrderDto$OrderDetail">
+    select address, case when status='COMPLETE' then null else order_at end as order_at, delivery_at, status, order_total_price from orders
   </select>
 </mapper>

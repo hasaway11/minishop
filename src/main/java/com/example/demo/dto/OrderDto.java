@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.order.*;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import java.time.*;
@@ -26,34 +27,23 @@ public class OrderDto {
 
   @Data
   public static class OrderDetail {
-    private Integer id;
-    private LocalDateTime displayTime;
+    private String address;
+    @JsonFormat(pattern="yyyy년 M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
+    private LocalDateTime orderAt;
+    @JsonFormat(pattern="yyyy년 M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
+    private LocalDateTime deliveryAt;
     private OrderStatus status;
     private Integer orderTotalPrice;
+    @Setter
     private List<OrderDto.Item> orderItems;
-
-    public OrderDetail(Order order, List<OrderDto.Item> orderItems) {
-      this.id = order.getId();
-      this.status = order.getStatus();
-      this.orderTotalPrice = order.getOrderTotalPrice();
-      this.orderItems = orderItems;
-
-      if(this.status==OrderStatus.CREATE)
-        this.displayTime = order.getOrderAt();
-      else if(this.status==OrderStatus.CANCEL)
-        this.displayTime = order.getCancelAt();
-      else
-        this.displayTime = order.getPaidAt();
-    }
   }
 
   @Data
   public static class Summary {
     private Integer id;
-    private String address;
+    @JsonFormat(pattern="M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
     private LocalDateTime orderTime;
     private OrderStatus status;
-    private int orderItemPrice;
     private int count;
     private String name;
   }

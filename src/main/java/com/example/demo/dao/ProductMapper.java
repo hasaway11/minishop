@@ -23,9 +23,6 @@ public interface ProductMapper {
   @Insert("insert into product values(#{id}, #{name}, #{info}, #{price}, 0, 0, 0, 0, #{stock}, #{category})")
   void save(Product product);
 
-  @Delete("delete from product where id=#{id}")
-  int deleteById(int id);
-
   int update(ProductDto.Update dto);
 
   @Select("select stock from product where id=#{id}")

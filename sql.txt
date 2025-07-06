@@ -98,11 +98,11 @@ create sequence cart_item_seq;
 
 create table temp_orders (
   temp_id number(7),
-  cart_id number(7),
+  cart_item_id number(7),
   username varchar2(10 char),
   product_id number(7),
   name varchar2(30 char),
-  image varchar2(41 char),
+  image varchar2(75 char),
   quantity number(2),
   total_price number(7),
   constraint temp_orders_pk primary key(cart_id)
@@ -116,7 +116,7 @@ create table orders (
   zipcode varchar2(5 char),
   address varchar2(50 char),
   order_at date,
-  paid_at date,
+  delivery_at date,
   cancel_at date,
   status varchar2(10 char),
   order_total_price number(10),

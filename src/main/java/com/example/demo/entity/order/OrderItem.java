@@ -14,9 +14,9 @@ public class OrderItem {
   private Integer totalPrice;
   private boolean reviewWritable;
 
-  public OrderItem(Integer orderId, CartDto.CheckoutDto dto) {
+  public OrderItem(Integer orderId, CartDto.CheckOutItem dto) {
     this.orderId = orderId;
-    this.productId = dto.getProductId();
+    this.productId = dto.getId();
     this.quantity = dto.getQuantity();
     this.totalPrice = dto.getTotalPrice();
     this.reviewWritable = false;

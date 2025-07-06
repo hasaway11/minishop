@@ -7,9 +7,13 @@ import java.util.*;
 
 @Mapper
 public interface TempOrderMapper {
-  // insert all로 변경할 것
-  @Insert("insert into temp_orders values(temp_orders.seq.nextval, #{cartItemId}, #{username}, #{productId}, #{name}, #{image}, #{quanity}, #{totalPrice})")
-  int save(TempOrder to);
+  int saveAll(List<TempOrder> tempOrders, int tempId);
 
-  void saveAll(List<TempOrder> tempOrders);
+  int deleteByTempId(int tempId);
+
+  @Select("select * from temp_orders where temp_id=#{tempId}")
+  List<TempOrder> findByTempId(Integer tempId);
+
+  @Select("select temp_orders_seq.nextval from dual")
+  int findNextTempId();
 }

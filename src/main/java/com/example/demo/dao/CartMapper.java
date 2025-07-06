@@ -8,13 +8,18 @@ import java.util.*;
 
 @Mapper
 public interface CartMapper {
+  @Select("select * from cart_item where id=#{id}")
+  Optional<CartItem> findById(int id);
+
   List<CartDto.Summary> findByUsername(String username, String url);
 
   @Select("select * from cart_item where username=#{username} and product_id=#{productId} and rownum=1")
   Optional<CartItem> findByUsernameAndProductId(String username, Integer productId);
 
-  @Select("select * from cart_item where id=#{id}")
-  Optional<CartItem> findById(int id);
+  //
+  List<TempOrder> findSelectedCartItems(List<Integer> ids, String url);
+
+  List<CartItem> findByIdIn(List<Integer> ids);
 
   @SelectKey(statement="select cart_item_seq.nextval from dual", keyProperty="id", before=true, resultType=int.class)
   @Insert("insert into cart_item values(cart_item_seq.nextval, #{username}, #{productId}, 1)")
@@ -26,12 +31,8 @@ public interface CartMapper {
   @Update("update cart_item set quantity=quantity-1 where id=#{id}")
   int decreaseQuantity(int id);
 
-  List<TempOrder> findSelectedCartItems(List<Integer> ids);
-
   @Delete("delete from cart_item where id=#{id}")
   int deleteById(int id);
-
-  List<CartItem> findByIdIn(List<Integer> ids);
 
   int deleteAll(List<Integer> ids);
 }

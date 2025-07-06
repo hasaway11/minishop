@@ -8,7 +8,6 @@ import lombok.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
-import java.time.*;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -21,57 +20,61 @@ public class OrderService {
 
   @Transactional
   public int prepareOrder(List<Integer> selectedCartItemIds, String loginId) {
-    List<TempOrder> tempOrders =  cartDao.findSelectedCartItems(selectedCartItemIds);
-    boolean containsItemNotOwnedByUser = selectedCartItems.stream().anyMatch(item->!item.getUsername().equals(loginId));
+    List<TempOrder> tempOrders =  cartDao.findSelectedCartItems(selectedCartItemIds, "http://localhost:8080/api/images/");
+    boolean containsItemNotOwnedByUser = tempOrders.stream().anyMatch(item->!item.getUsername().equals(loginId));
     if (containsItemNotOwnedByUser)
       throw new JobFailException("잘못된 작업입니다.");
-    int orderTotalPrice = selectedCartItems.stream().mapToInt(TempOrder::getTotalPrice).sum();
-    tempOrderDao.saveAll(tempOrders);
-    return new tempOrder
+    int newTempId = tempOrderDao.findNextTempId();
+    tempOrderDao.saveAll(tempOrders, newTempId);
+    return newTempId;
   }
 
-  //  @Transactional
-//  public int prepareOrder(List<Integer> selectedCartItemIds, String loginId) {
-//    List<CartDto.CheckoutDto> selectedCartItems =  cartDao.findSelectedCartItems(selectedCartItemIds);
-//    boolean containsItemNotOwnedByUser = selectedCartItems.stream().anyMatch(item->!item.getUsername().equals(loginId));
-//    if (containsItemNotOwnedByUser)
-//      throw new JobFailException("잘못된 작업입니다.");
-//    int orderTotalPrice = selectedCartItems.stream().mapToInt(CartDto.CheckoutDto::getTotalPrice).sum();
-//
-//    Order order = Order.builder().username(loginId).orderAt(LocalDateTime.now()).status(OrderStatus.CREATE).orderTotalPrice(orderTotalPrice).build();
-//    orderDao.save(order);
-//
-//    List<OrderItem> orderItems = selectedCartItems.stream().map(item->new OrderItem(order.getId(), item)).toList();
-//    orderItemDao.save(orderItems);
-//    return order.getId();
-//  }
-
-  public OrderDto.OrderDetail read(Integer orderId, String loginId) {
-    Order order =  orderDao.findById(orderId).orElseThrow(()->new JobFailException("작업을 수행할 수 없습니다"));
-    if(order.getUsername().equals(loginId) || order.getStatus()!=OrderStatus.CREATE)
-      throw new JobFailException("잘못된 작업입니다");
-    List<OrderDto.Item> orderItems = orderItemDao.findByOrderId(orderId, "http://localhost:8080/api/images/");
-    return new OrderDto.OrderDetail(order, orderItems);
+  @Transactional(readOnly = true)
+  public Map<String,Object> read(Integer tempId, String loginId) {
+    List<TempOrder> tempOrders = tempOrderDao.findByTempId(tempId);
+    if(tempOrders.isEmpty())
+      throw new JobFailException("주문 정보를 찾을 수 없습니다");
+    boolean containsItemNotOwnedByUser = tempOrders.stream().anyMatch(item->!item.getUsername().equals(loginId));
+    if (containsItemNotOwnedByUser)
+      throw new JobFailException("이미 주문완료되었거나 유효하지 않은 주문서입니다.");
+    int orderTotalPrice = tempOrders.stream().mapToInt(TempOrder::getTotalPrice).sum();
+    return Map.of("orderTotalPrice", orderTotalPrice, "orders", tempOrders);
   }
 
   @Transactional
   public void order(OrderDto.OrderRequest dto, String loginId) {
-    Order order = orderDao.findById(dto.getId()).orElseThrow(()->new JobFailException("작업을 수행할 수 없습니다"));
-    if(order.getUsername().equals(loginId) || order.getStatus()!=OrderStatus.CREATE)
-      throw new JobFailException("잘못된 작업입니다");
-    orderDao.updateAddress(dto.getId(), dto.getAddress(), dto.getZipcode());
-    orderDao.updateStatus(dto.getId(), OrderStatus.PAY);
+    List<TempOrder> tempOrders = tempOrderDao.findByTempId(dto.getId());
+    if(tempOrders.isEmpty())
+      throw new JobFailException("주문 정보를 찾을 수 없습니다");
+    boolean containsItemNotOwnedByUser = tempOrders.stream().anyMatch(item->!item.getUsername().equals(loginId));
+    if (containsItemNotOwnedByUser)
+      throw new JobFailException("이미 주문완료되었거나 유효하지 않은 주문서입니다.");
+
+    int orderTotalPrice = tempOrders.stream().mapToInt(TempOrder::getTotalPrice).sum();
+    Order order = new Order(loginId, dto.getZipcode(), dto.getAddress(), orderTotalPrice);
+    orderDao.save(order);
+
+    List<OrderItem> list = tempOrders.stream().map(t->new OrderItem(order.getId(), t.getProductId(), t.getQuantity(), t.getTotalPrice(), true)).toList();
+    orderItemDao.save(list);
+
+    List<Integer> cartIds = tempOrders.stream().map(TempOrder::getCartItemId).toList();
+    tempOrderDao.deleteByTempId(dto.getId());
+    cartDao.deleteAll(cartIds);
   }
 
+  @Transactional(readOnly = true)
   public List<OrderDto.Summary> orderList(String loginId) {
     return orderDao.findByUsername(loginId);
   }
 
+  @Transactional(readOnly = true)
   public OrderDto.OrderDetail orderDetails(Integer orderId, String loginId) {
-    Optional<Order> order = orderDao.findById(orderId);
-    if(order.isEmpty())
+    Optional<OrderDto.OrderDetail> optionalOrder = orderDao.findById(orderId);
+    if(optionalOrder.isEmpty())
       throw new JobFailException("주문내역을 확인할 수 없습니다");
+    OrderDto.OrderDetail orderDetail = optionalOrder.get();
     List<OrderDto.Item> orderItems = orderItemDao.findByOrderId(orderId, "http://localhost:8080/api/images/");
-    return new OrderDto.OrderDetail(order.get(), orderItems);
+    orderDetail.setOrderItems(orderItems);
+    return orderDetail;
   }
 }

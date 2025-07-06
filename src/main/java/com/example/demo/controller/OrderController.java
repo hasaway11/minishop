@@ -22,15 +22,14 @@ public class OrderController {
 
   @PostMapping("/api/orders/prepare")
   public ResponseEntity<Integer> saveSelectedCartItemsToSession(@RequestParam List<Integer> ids, Principal principal) {
-    //
     int orderId = service.prepareOrder(ids, principal.getName());
     return ResponseEntity.ok(orderId);
   }
 
   @GetMapping("/api/orders/check")
-  public ResponseEntity<OrderDto.OrderDetail> orderCheck(Integer orderId, Principal principal) {
-    OrderDto.OrderDetail orders = service.read(orderId, principal.getName());
-    return ResponseEntity.ok(orders);
+  public ResponseEntity<Map<String,Object>> orderCheck(Integer orderId, Principal principal) {
+    Map<String,Object> map = service.read(orderId, principal.getName());
+    return ResponseEntity.ok(map);
   }
 
   @PostMapping("/api/orders")

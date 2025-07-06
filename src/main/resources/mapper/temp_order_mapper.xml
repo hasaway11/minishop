@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.TempOrderMapper">
+  <insert id="saveAll">
+    insert all
+    <foreach collection="tempOrders" item="o">
+      INTO temp_orders (temp_id, cart_item_id, username, product_id, name, image, quantity, total_price)
+      values(#{tempId}, #{o.cartItemId}, #{o.username}, #{o.productId}, #{o.name}, #{o.image}, #{o.quantity}, #{o.totalPrice})
+    </foreach>
+    SELECT * FROM dual
+  </insert>
+
+  <delete id="deleteByTempId">
+    delete from temp_orders where temp_id = #{tempId}
+  </delete>
+</mapper>

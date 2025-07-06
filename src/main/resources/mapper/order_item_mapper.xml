@@ -12,6 +12,6 @@
 
   <select id="findByOrderId" resultType="com.example.demo.dto.OrderDto$Item">
     select oi.product_id, p.name, '${url}'|| (select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image,
-    oi.quantity, oi.total_price from order_item oi join product p on oi.product_id=p.id where oi.order_id=#{orderId}
+    oi.quantity, oi.total_price, oi.review_writable from order_item oi join product p on oi.product_id=p.id where oi.order_id=#{orderId}
   </select>
 </mapper>

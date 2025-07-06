@@ -5,16 +5,24 @@ import lombok.*;
 import java.time.*;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Order {
   private Integer id;
   private String username;
   private LocalDateTime orderAt;
-  private LocalDateTime paidAt;
+  private LocalDateTime deliveryAt;
   private LocalDateTime cancelAt;
-  private String deliveryAddress;
+  private String zipcode;
+  private String address;
   private OrderStatus status;
   private Integer orderTotalPrice;
+
+  public Order(String username, String zipcode, String deliveryAddress, int orderTotalPrice) {
+    this.username = username;
+    this.orderAt = LocalDateTime.now();
+    this.zipcode = zipcode;
+    this.address = deliveryAddress;
+    this.status = OrderStatus.PAY;
+    this.orderTotalPrice = orderTotalPrice;
+  }
 }
