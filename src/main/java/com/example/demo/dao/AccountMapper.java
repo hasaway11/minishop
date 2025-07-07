@@ -14,7 +14,7 @@ public interface AccountMapper {
   @Insert("insert into account values(#{username}, #{password}, #{email}, #{signupDate}, #{role})")
   int save(Account account);
 
-  @Select("select password from account where email=#{email} and rownum=1")
+  @Select("select username from account where email=#{email} and rownum=1")
   Optional<String> findUsernameByEmail(String email);
 
   @Select("select username, password, email, role from account where username=#{username}")

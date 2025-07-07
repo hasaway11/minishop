@@ -14,4 +14,5 @@ public class TempOrder {
   private String image;
   private int quantity;
   private int totalPrice;
+  private String seller;
 }

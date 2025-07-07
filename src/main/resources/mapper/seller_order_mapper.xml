@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.SellerOrderMapper">
+  <select id="findBySeller" resultType="com.example.demo.dto.SellerOrderDto$OrderDetail">
+    select o.order_at, '${url}'||(select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image,
+    p.name as product_name, p.price as product_price, o.id as order_id, o.username as orderer, o.status, oi.product_id, oi.quantity, oi.total_price
+    from order_item oi join orders o on oi.order_id=o.id join product p on oi.product_id=p.id
+    where o.seller=#{seller} order by p.id, o.order_at
+  </select>
+
+  <update id="updateStatus">
+    update or
+  </update>
+</mapper>

@@ -112,27 +112,30 @@ create sequence temp_orders_seq;
 
 create table orders (
   id number(7),
-  username varchar2(10 char),
+  orderer varchar2(10 char),
+  order_at date,
   zipcode varchar2(5 char),
   address varchar2(50 char),
-  order_at date,
-  delivery_at date,
-  cancel_at date,
-  status varchar2(10 char),
   order_total_price number(10),
   constraint order_pk primary key(id)
 );
 
 create table order_item (
+  id number(8),
   order_id number(7),
   product_id number(6),
+  delivery_at date,
+  cancel_at date,
+  status varchar2(10 char),
+  seller varchar2(10 char),
   quantity number(2),
   total_price number(10),
-  review_writable number(1)
-  constraint order_item_pk primary key(order_id, product_id)
+  review_writable number(1),
+  constraint order_item_pk primary key(id)
 );
 
 create sequence orders_seq;
+create sequence order_item_seq;
 
 create table review (
   id number(7),

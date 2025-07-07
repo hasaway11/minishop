@@ -20,18 +20,21 @@ import java.util.*;
 public class OrderController {
   private final OrderService service;
 
+  // 장바구니에서 선택한 상품들을 임시 테이블에 저장
   @PostMapping("/api/orders/prepare")
-  public ResponseEntity<Integer> saveSelectedCartItemsToSession(@RequestParam List<Integer> ids, Principal principal) {
+  public ResponseEntity<Integer> saveSelectedCartItems(@RequestParam List<Integer> ids, Principal principal) {
     int orderId = service.prepareOrder(ids, principal.getName());
     return ResponseEntity.ok(orderId);
   }
 
+  // 주문하기 전, 주문 내용을 확인하기 위해 출력
   @GetMapping("/api/orders/check")
   public ResponseEntity<Map<String,Object>> orderCheck(Integer orderId, Principal principal) {
     Map<String,Object> map = service.read(orderId, principal.getName());
     return ResponseEntity.ok(map);
   }
 
+  // 주문 내용 확인 후 주문
   @PostMapping("/api/orders")
   public ResponseEntity<Void> order(@Valid OrderDto.OrderRequest dto, BindingResult br, Principal principal) {
     service.order(dto, principal.getName());

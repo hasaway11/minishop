@@ -19,10 +19,13 @@ public class OrderDto {
   @Data
   public static class Item {
     private Integer productId;
-    private String name;
+    private String productName;
     private String image;
     private Integer quantity;
     private Integer totalPrice;
+    @JsonFormat(pattern="yyyy년 M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
+    private LocalDateTime deliveryAt;
+    private OrderStatus status;
   }
 
   @Data
@@ -30,9 +33,6 @@ public class OrderDto {
     private String address;
     @JsonFormat(pattern="yyyy년 M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
     private LocalDateTime orderAt;
-    @JsonFormat(pattern="yyyy년 M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
-    private LocalDateTime deliveryAt;
-    private OrderStatus status;
     private Integer orderTotalPrice;
     @Setter
     private List<OrderDto.Item> orderItems;
@@ -42,9 +42,8 @@ public class OrderDto {
   public static class Summary {
     private Integer id;
     @JsonFormat(pattern="M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
-    private LocalDateTime orderTime;
-    private OrderStatus status;
+    private LocalDateTime orderAt;
     private int count;
-    private String name;
+    private String productName;
   }
 }

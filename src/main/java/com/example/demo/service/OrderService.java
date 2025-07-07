@@ -20,6 +20,9 @@ public class OrderService {
 
   @Transactional
   public int prepareOrder(List<Integer> selectedCartItemIds, String loginId) {
+    // 장바구니에서 선택한 상품들의 임시주문엔티티를 읽어온다
+    // 자신의 주문상품이 아닌 상품이 섞여 있다면 오류 처리
+    // 임시주문엔티티들을 저장한 다음 임시주문번호를 리턴
     List<TempOrder> tempOrders =  cartDao.findSelectedCartItems(selectedCartItemIds, "http://localhost:8080/api/images/");
     boolean containsItemNotOwnedByUser = tempOrders.stream().anyMatch(item->!item.getUsername().equals(loginId));
     if (containsItemNotOwnedByUser)
@@ -29,6 +32,7 @@ public class OrderService {
     return newTempId;
   }
 
+  // 임시 주문 엔티티와 총 주문 가격을 리턴
   @Transactional(readOnly = true)
   public Map<String,Object> read(Integer tempId, String loginId) {
     List<TempOrder> tempOrders = tempOrderDao.findByTempId(tempId);
@@ -54,7 +58,7 @@ public class OrderService {
     Order order = new Order(loginId, dto.getZipcode(), dto.getAddress(), orderTotalPrice);
     orderDao.save(order);
 
-    List<OrderItem> list = tempOrders.stream().map(t->new OrderItem(order.getId(), t.getProductId(), t.getQuantity(), t.getTotalPrice(), true)).toList();
+    List<OrderItem> list = tempOrders.stream().map(tempOrder->new OrderItem(order.getId(), tempOrder)).toList();
     orderItemDao.save(list);
 
     List<Integer> cartIds = tempOrders.stream().map(TempOrder::getCartItemId).toList();
