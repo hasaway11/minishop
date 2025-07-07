@@ -8,7 +8,7 @@ import java.util.*;
 
 @Mapper
 public interface OrderItemMapper {
-  int save(List<OrderItem> orderItems);
+  int save(OrderItem orderItem);
 
   List<OrderDto.Item> findByOrderId(int orderId, String url);
 

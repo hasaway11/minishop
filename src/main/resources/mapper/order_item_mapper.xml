@@ -2,12 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.OrderItemMapper">
   <insert id="save">
-    insert all
-    <foreach collection="list" item="item">
-      into order_item(order_id, product_id, quantity, total_price, review_writable )
-      values (#{item.orderId}, #{item.productId}, #{item.quantity}, #{item.totalPrice}, #{item.reviewWritable})
-    </foreach>
-    select * from dual
+    insert into order_item(id, order_id, product_id, status, seller, quantity, total_price, review_writable)
+    values (order_item_seq.nextval,#{orderId},#{productId},#{status},#{seller},#{quantity},#{totalPrice},#{reviewWritable})
   </insert>
 
   <select id="findByOrderId" resultType="com.example.demo.dto.OrderDto$Item">

@@ -59,7 +59,7 @@ public class OrderService {
     orderDao.save(order);
 
     List<OrderItem> list = tempOrders.stream().map(tempOrder->new OrderItem(order.getId(), tempOrder)).toList();
-    orderItemDao.save(list);
+    tempOrders.forEach(item->orderItemDao.save(new OrderItem(order.getId(), item)));
 
     List<Integer> cartIds = tempOrders.stream().map(TempOrder::getCartItemId).toList();
     tempOrderDao.deleteByTempId(dto.getId());

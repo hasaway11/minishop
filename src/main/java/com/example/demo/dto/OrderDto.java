@@ -43,6 +43,7 @@ public class OrderDto {
     private Integer id;
     @JsonFormat(pattern="M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
     private LocalDateTime orderAt;
+    private int orderTotalPrice;
     private int count;
     private String productName;
   }

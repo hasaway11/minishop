@@ -9,7 +9,8 @@ import java.util.*;
 @Mapper
 public interface OrderMapper {
   @SelectKey(statement="select orders_seq.nextval from dual", keyProperty="id", before=true, resultType=int.class)
-  @Insert("insert into orders(id, username, order_at, status, order_total_price, address, zipcode) values(#{id}, #{username}, #{orderAt}, #{status}, #{orderTotalPrice}, #{address}, #{zipcode})")
+
+  @Insert("insert into orders(id, orderer, order_at, zipcode, address, order_total_price) values(#{id}, #{orderer}, #{orderAt},  #{zipcode}, #{address}, #{orderTotalPrice})")
   int save(Order order);
 
   List<OrderDto.Summary> findByUsername(String username);

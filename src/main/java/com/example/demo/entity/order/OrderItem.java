@@ -9,6 +9,7 @@ import java.time.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class OrderItem {
   private Integer id;
   private Integer orderId;
