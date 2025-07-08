@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.product.*;
+import jakarta.validation.constraints.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.*;
@@ -21,10 +22,13 @@ public interface ProductMapper {
 
   @SelectKey(statement="select product_seq.nextval from dual", keyProperty="id", before=true, resultType=int.class)
   @Insert("insert into product values(#{id}, #{name}, #{info}, #{price}, 0, 0, 0, 0, #{stock}, #{category})")
-  void save(Product product);
+  int save(Product product);
 
   int update(ProductDto.Update dto);
 
   @Select("select stock from product where id=#{id}")
   int findStockById(int id);
+
+  @Update("update product set review_count=review_count+1, total_star=total_star+#{rating} where id=#{productId}")
+  int updateRating(Integer productId, Integer rating);
 }

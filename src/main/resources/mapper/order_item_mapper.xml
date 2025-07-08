@@ -7,11 +7,13 @@
   </insert>
 
   <select id="findByOrderId" resultType="com.example.demo.dto.OrderDto$Item">
-    select oi.product_id, p.name as product_name, '${url}'|| (select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image,
-    oi.quantity, oi.total_price, oi.delivery_at, oi.status
+    select oi.id, oi.product_id, p.name as product_name, '${url}'|| (select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image,
+    oi.quantity, oi.total_price, oi.delivery_at, oi.status, oi.review_writable
     from order_item oi join product p on oi.product_id=p.id where oi.order_id=#{orderId}
+  </select>
 
-    select oi.product_id, p.name, '${url}'|| (select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image,
-    oi.quantity, oi.total_price, oi.review_writable from order_item oi join product p on oi.product_id=p.id where oi.order_id=#{orderId}
+  <select id="findProductByOrderItemId" resultType="com.example.demo.dto.OrderDto$OrderProductDto">
+    select id as product_id, name as product_name, '${url}'|| (select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image from product p
+    where id=(select product_id from order_item where id=#{orderItemId} and review_writable=1)
   </select>
 </mapper>

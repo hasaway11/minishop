@@ -18,6 +18,7 @@ public class OrderDto {
 
   @Data
   public static class Item {
+    private Integer id;
     private Integer productId;
     private String productName;
     private String image;
@@ -26,6 +27,7 @@ public class OrderDto {
     @JsonFormat(pattern="yyyy년 M월 d일(E) HH:mm", locale="ko", timezone="Asia/Seoul")
     private LocalDateTime deliveryAt;
     private OrderStatus status;
+    private boolean reviewWritable;
   }
 
   @Data
@@ -46,5 +48,12 @@ public class OrderDto {
     private int orderTotalPrice;
     private int count;
     private String productName;
+  }
+
+  @Data
+  public static class OrderProductDto {
+    private Integer productId;
+    private String productName;
+    private String image;
   }
 }

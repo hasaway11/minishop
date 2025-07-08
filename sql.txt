@@ -142,8 +142,8 @@ create table review (
   id number(7),
   writer varchar2(10 char),
   content varchar2(100 char),
-  star number(1),
-  write_date date,
+  rating number(1),
+  write_time date,
   product_id number(7),
   constraint review_pk primary key(id)
 );

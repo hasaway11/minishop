@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.order.*;
+import com.example.demo.entity.product.*;
 import com.example.demo.service.*;
 import jakarta.validation.*;
 import jakarta.validation.constraints.*;
@@ -15,22 +16,32 @@ import java.security.*;
 import java.util.*;
 
 @RequiredArgsConstructor
-@Secured("ROLE_USER")
+@Secured("ROLE_MEMBER")
 @RestController
 @Validated
 public class ReviewController {
   private final ReviewService service;
 
-  // 리뷰 작성 가능 목록
-  @GetMapping("/reviews/available")
-  public ResponseEntity<List<OrderItem>> readListOfProductsAvailableForReview(Principal principal) {
-    // 주문번호, 주문일, 상품번호, 이미지
-    return service.getReviewableOrderItems(principal.getName());
+  @GetMapping("/reviews/product")
+  public ResponseEntity<OrderDto.OrderProductDto> getPrdocutSummaryForReview(Integer orderItemId) {
+    System.out.println(orderItemId);
+    return ResponseEntity.ok(service.getPrdocutSummaryForReview(orderItemId));
   }
+
 
   // 리뷰 추가 api
   @PostMapping("/reviews/new")
-  public ResponseEntity<ReviewDto.ReviewList> write(@Valid ReviewDto.Create dto, Principal principal) {
-    return ResponseEntity.ok(service.write(dto, principal.getName()));
+  public ResponseEntity<Void> write(@Valid ReviewDto.Create dto, Principal principal) {
+    boolean result = service.write(dto, principal.getName());
+    if(result)
+      return ResponseEntity.ok(null);
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+  }
+
+  @GetMapping("/reviews")
+  public ResponseEntity<List<ReviewDto.Read>> readReviews(Principal principal) {
+    List<ReviewDto.Read> list = service.findByWriter(principal.getName());
+    list.stream().forEach(a->System.out.println(a));
+    return ResponseEntity.ok(list);
   }
 }

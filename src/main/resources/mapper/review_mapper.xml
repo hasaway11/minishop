@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ReviewMapper">
+  <select id="findByWriter" resultType="com.example.demo.dto.ReviewDto$Read">
+    select r.write_time, r.rating, r.content, p.name,
+    '${url}'||(select name from product_image pi where pi.product_id=p.id and rownum=1) as image from review r
+    join product p on r.product_id=p.id where writer = #{writer}
+  </select>
+
+</mapper>

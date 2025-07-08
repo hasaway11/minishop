@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.product.*;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -14,21 +15,29 @@ public class ReviewDto {
     @NotEmpty
     private String content;
     @NotNull
-    private Integer star;
+    private Integer rating;
+    @NotNull
+    private Integer orderItemId;
     @NotNull
     private Integer productId;
 
     public Review toReview(String loginId) {
       return null;
     }
+
+    public Review toEntity(String loginId) {
+      return new Review(null, loginId, content, rating, LocalDateTime.now(), productId);
+    }
   }
 
-  @Getter
-  @AllArgsConstructor
-  public static class ReviewList {
-    private List<Review> reviews;
-    private Integer countOfReview;
-    private Double rating;
+  @Data
+  public static class Read {
+    @JsonFormat(pattern = "yyyy년 MM월 dd일")
+    private LocalDateTime writeTime;
+    private int rating;
+    private String content;
+    private String name;
+    private String image;
   }
 }
 
