@@ -41,6 +41,8 @@ create table member (
    birth_date date,
    profile varchar2(15 char),
    member_level varchar2(10 char),
+   order_count number(4) default 0,
+   order_amount number(8) default 0,
    constraint member_pk_username primary key(username)
 );
 
@@ -67,8 +69,8 @@ create table product (
     seller varchar2(10 char),
     info clob,
     price number(7),
-    sales_volume number(5),
-    sales_amout number(10),
+    sales_count number(5),
+    sales_amount number(10),
     total_star number(6),
     review_count number(5),
     stock number(3),

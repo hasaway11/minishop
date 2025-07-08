@@ -17,6 +17,8 @@ public class OrderService {
   private final TempOrderMapper tempOrderDao;
   private final OrderMapper orderDao;
   private final OrderItemMapper orderItemDao;
+  private final ProductMapper productDao;
+  private final MemberMapper memberDao;
 
   @Transactional
   public int prepareOrder(List<Integer> selectedCartItemIds, String loginId) {
@@ -59,11 +61,15 @@ public class OrderService {
     orderDao.save(order);
 
     List<OrderItem> list = tempOrders.stream().map(tempOrder->new OrderItem(order.getId(), tempOrder)).toList();
-    tempOrders.forEach(item->orderItemDao.save(new OrderItem(order.getId(), item)));
+    tempOrders.forEach(item->{
+      orderItemDao.save(new OrderItem(order.getId(), item));
+      productDao.updateSalesStat(item.getProductId(), item.getQuantity(), item.getTotalPrice());
+    });
 
     List<Integer> cartIds = tempOrders.stream().map(TempOrder::getCartItemId).toList();
     tempOrderDao.deleteByTempId(dto.getId());
     cartDao.deleteAll(cartIds);
+    memberDao.updateOrderStat(orderTotalPrice, loginId);
   }
 
   @Transactional(readOnly = true)

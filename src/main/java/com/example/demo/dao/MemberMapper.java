@@ -14,5 +14,8 @@ public interface MemberMapper {
   Optional<Member> findById(String username);
 
   @Update("update member set profile=#{newProfile} where username=#{username}")
-  int updateProfile(String newProfile, String loginId);
+  int updateProfile(String newProfile, String username);
+
+  @Update("update member set order_count=order_count+1, order_amount=order_amount+#{money} where username=#{username}")
+  int updateOrderStat(int money, String loginId);
 }
