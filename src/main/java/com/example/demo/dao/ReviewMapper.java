@@ -12,4 +12,13 @@ public interface ReviewMapper {
   int save(Review review);
 
   List<ReviewDto.Read> findByWriter(String writer, String url);
+
+  @Select("select * from review where id=#{reviewId}")
+  Optional<Review> findById(int reviewId);
+
+  @Delete("delete from review where id=#{reviewId}")
+  int deleteById(int reviewId);
+
+  @Select("select * from review where product_id=#{productId}")
+  List<Review> findByProductId(Integer productId);
 }

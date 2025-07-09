@@ -6,5 +6,4 @@
     '${url}'||(select name from product_image pi where pi.product_id=p.id and rownum=1) as image from review r
     join product p on r.product_id=p.id where writer = #{writer}
   </select>
-
 </mapper>

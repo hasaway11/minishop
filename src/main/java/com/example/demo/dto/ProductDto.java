@@ -53,7 +53,7 @@ public class ProductDto {
 
   @AllArgsConstructor
   @NoArgsConstructor
-  @Data
+  @Getter
   public static class Read {
     private Integer id;
     private String name;
@@ -62,8 +62,13 @@ public class ProductDto {
     private Integer reviewCount;
     private Integer stock;
     private String seller;
-    private Double star;
+    private Double rating;
     private List<String> images;
     private List<Review> reviews;
+
+    public Read setImages(List<String> images) {
+      this.images = images;
+      return this;
+    }
   }
 }

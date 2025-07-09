@@ -9,6 +9,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.http.*;
 import org.springframework.security.access.annotation.*;
+import org.springframework.validation.*;
 import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +25,8 @@ public class ReviewController {
 
   @GetMapping("/reviews/product")
   public ResponseEntity<OrderDto.OrderProductDto> getPrdocutSummaryForReview(Integer orderItemId) {
-    System.out.println(orderItemId);
     return ResponseEntity.ok(service.getPrdocutSummaryForReview(orderItemId));
   }
-
 
   // 리뷰 추가 api
   @PostMapping("/reviews/new")
@@ -38,10 +37,14 @@ public class ReviewController {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
   }
 
+  // 제품번호 추가해서 응답하기
+  @DeleteMapping("/api/reviews/{id}")
+  public ResponseEntity<List<Review>> delete(@PathVariable("id") int reviewId, Principal principal) {
+    return ResponseEntity.ok(service.delete(reviewId, principal.getName()));
+  }
+
   @GetMapping("/reviews")
   public ResponseEntity<List<ReviewDto.Read>> readReviews(Principal principal) {
-    List<ReviewDto.Read> list = service.findByWriter(principal.getName());
-    list.stream().forEach(a->System.out.println(a));
-    return ResponseEntity.ok(list);
+    return ResponseEntity.ok(service.findByWriter(principal.getName()));
   }
 }

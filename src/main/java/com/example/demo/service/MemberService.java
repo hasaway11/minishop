@@ -25,21 +25,20 @@ public class MemberService {
   public Member signup(MemberDto.Signup dto) {
     if(accountDao.existsById(dto.getUsername()))
       throw new JobFailException("사용중인 아이디입니다");
-    Member member = dto.toEntity(passwordEncoder);
     String profileName = ImageUtil.saveProfile(dto.getProfile(), dto.getUsername());
-    member.setProfile(profileName);
+    Member member = dto.toEntity(passwordEncoder, profileName);
     accountDao.save(member);
     memberDao.save(member);
     return memberDao.findById(dto.getUsername()).get();
   }
 
   @Transactional(readOnly=true)
-  public MemberDto.Read read(String loginId) {
+  public MemberDto.Read readme(String loginId) {
     return memberDao.findById(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다")).toRead();
   }
 
-  public void changeProfile(MemberDto.changeProfile dto, String loginId) {
-    Member member = memberDao.findById(loginId).get();
+  public void updateProfile(MemberDto.changeProfile dto, String loginId) {
+    Member member = memberDao.findById(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다"));
     MultipartFile file = dto.getProfile();
     String ext = FilenameUtils.getExtension(file.getOriginalFilename());
     String newProfileName = loginId + "." + ext;

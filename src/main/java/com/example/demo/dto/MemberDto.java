@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.account.*;
-import com.example.demo.util.*;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -27,9 +26,9 @@ public class MemberDto {
     private LocalDate birthDate;
     private MultipartFile profile;
 
-    public Member toEntity(PasswordEncoder passwordEncoder) {
+    public Member toEntity(PasswordEncoder passwordEncoder, String profileName) {
       String encodedPassword = passwordEncoder.encode(password);
-      return new Member(username, encodedPassword, email, "MEMBER", birthDate, null, MemberLevel.NORMAL);
+      return new Member(username, encodedPassword, email, "MEMBER", birthDate, profileName, MemberLevel.NORMAL);
     }
   }
 

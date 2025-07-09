@@ -71,7 +71,7 @@ create table product (
     price number(7),
     sales_count number(5),
     sales_amount number(10),
-    total_star number(6),
+    total_rating number(6),
     review_count number(5),
     stock number(3),
     category number(3),

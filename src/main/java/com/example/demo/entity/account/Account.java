@@ -17,8 +17,4 @@ public class Account {
   public Account(String username) {
     this.username = username;
   }
-
-  public void changePassword(String encodedPassword) {
-    this.password = encodedPassword;
-  }
 }

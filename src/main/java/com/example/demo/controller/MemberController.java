@@ -30,8 +30,8 @@ public class MemberController {
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "내 정보 보기", description = "내 정보 보기")
   @GetMapping("/api/members")
-  public ResponseEntity<MemberDto.Read> read(Principal principal) {
-    MemberDto.Read dto = service.read(principal.getName());
+  public ResponseEntity<MemberDto.Read> readme(Principal principal) {
+    MemberDto.Read dto = service.readme(principal.getName());
     return ResponseEntity.ok(dto);
   }
 
@@ -39,8 +39,8 @@ public class MemberController {
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "프사 변경", description = "프사를 변경")
   @PutMapping("/api/members/profile")
-  public ResponseEntity<Void> changeProfile(@Valid MemberDto.changeProfile dto, BindingResult br, Principal principal) {
-    service.changeProfile(dto, principal.getName());
+  public ResponseEntity<Void> updateProfile(@Valid MemberDto.changeProfile dto, BindingResult br, Principal principal) {
+    service.updateProfile(dto, principal.getName());
     return ResponseEntity.ok(null);
   }
 }

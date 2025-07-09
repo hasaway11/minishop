@@ -4,6 +4,7 @@ import com.example.demo.dao.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.product.*;
 import com.example.demo.exception.*;
+import com.example.demo.util.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
@@ -31,7 +32,9 @@ public class ProductService {
     return new PageResponse<>(products, pageno, PAGE_SIZE, totalCount);
   }
 
+  @Transactional(readOnly=true)
   public ProductDto.Read read(int id) {
-    return productDao.findById(id, "http://localhost:8080/api/images/").orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+    ProductDto.Read dto =  productDao.findById(id, "http://localhost:8080/api/images/").orElseThrow(()->new EntityNotFoundException("상품을 찾을 수 없습니다"));
+    return dto.setImages(productImageDao.findImageUrlsByProductId(id, MiniShopConstants.IMAGE_URL));
   }
 }

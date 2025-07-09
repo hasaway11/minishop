@@ -32,6 +32,6 @@ public interface ProductMapper {
   @Update("update product set sales_count=sales_count+#{count}, sales_amount=sales_amount+#{money} where id=#{productId}")
   int updateSalesStat(int productId, int count, int money);
 
-  @Update("update product set review_count=review_count+1, total_star=total_star+#{rating} where id=#{productId}")
-  int updateRating(Integer productId, Integer rating);
+  @Update("update product set review_count=review_count+#{count}, total_rating=total_rating+#{rating} where id=#{productId}")
+  int updateRating(Integer productId, Integer count, Integer rating);
 }

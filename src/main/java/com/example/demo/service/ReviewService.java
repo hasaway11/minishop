@@ -28,7 +28,7 @@ public class ReviewService {
     Review review = dto.toEntity(loginId);
     reviewDao.save(review);
     orderItemDao.updateReviewableToFalse(dto.getOrderItemId());
-    return productDao.updateRating(dto.getProductId(), dto.getRating())==1;
+    return productDao.updateRating(dto.getProductId(), 1, dto.getRating())==1;
   }
 
   public OrderDto.OrderProductDto getPrdocutSummaryForReview(Integer orderItemId) {
@@ -37,5 +37,14 @@ public class ReviewService {
 
   public List<ReviewDto.Read> findByWriter(String loginId) {
     return reviewDao.findByWriter(loginId, MiniShopConstants.IMAGE_URL);
+  }
+
+  public List<Review> delete(int reviewId, String loginId) {
+    Review review = reviewDao.findById(reviewId).orElseThrow(()->new EntityNotFoundException("리뷰를 찾을 수 없습니다"));
+    if(!review.getWriter().equals(loginId))
+      throw new JobFailException("잘못된 작업입니다");
+    reviewDao.deleteById(reviewId);
+    productDao.updateRating(review.getProductId(), -1, -review.getRating());
+    return reviewDao.findByProductId(review.getProductId());
   }
 }
