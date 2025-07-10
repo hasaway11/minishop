@@ -71,4 +71,10 @@ public class ProductDto {
       return this;
     }
   }
+
+  @Data
+  public static class Seller {
+    private Integer pageno =1;
+    private String seller;
+  }
 }

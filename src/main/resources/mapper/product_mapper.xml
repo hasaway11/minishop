@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.ProductMapper">
   <select id="findAllBySeller" resultType="com.example.demo.dto.ProductDto$Summary">
-    SELECT p.id as id, p.seller, p.name, p.price, p.sales_volume, p.review_count, case when review_count=0 then 0 else total_rating/review_count end as rating,
+    SELECT p.id as id, p.seller, p.name, p.price, p.sales_count, p.review_count, case when review_count=0 then 0 else total_rating/review_count end as rating,
     '${url}'||(select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image from product p
     where seller=#{seller} order by p.id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
   </select>

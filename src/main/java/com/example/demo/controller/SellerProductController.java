@@ -27,7 +27,7 @@ public class SellerProductController {
   }
 
   @GetMapping("/api/seller/products")
-  public ResponseEntity<PageResponse<ProductDto.Summary>> findAll(@RequestParam(defaultValue="1") int pageno, Principal principal) {
+  public ResponseEntity<PageResponse<ProductDto.Summary>> findAllBySeller(@RequestParam(defaultValue="1") Integer pageno, Principal principal) {
     PageResponse<ProductDto.Summary> products = service.findBySeller(pageno, principal.getName());
     return ResponseEntity.ok(products);
   }

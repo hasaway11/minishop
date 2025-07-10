@@ -38,12 +38,16 @@ public class MemberDto {
     private String username;
     private String email;
     private String profile;
-    @JsonFormat(pattern="yyyy년 MM월 dd일")
+    @JsonFormat(pattern="yyyy년 M월 d일")
     private LocalDate signupDate;
+    @JsonFormat(pattern="yyyy년 M월 d일")
     private LocalDate birthDate;
-    // 가입기간
     private long days;
     private String level;
+    private int orderCount;
+    private int orderAmount;
+    // 가입기간
+
   }
 
   @Data

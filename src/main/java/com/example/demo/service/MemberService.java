@@ -37,19 +37,20 @@ public class MemberService {
     return memberDao.findById(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다")).toRead();
   }
 
-  public void updateProfile(MemberDto.changeProfile dto, String loginId) {
+  public String updateProfile(MemberDto.changeProfile dto, String loginId) {
     Member member = memberDao.findById(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다"));
     MultipartFile file = dto.getProfile();
     String ext = FilenameUtils.getExtension(file.getOriginalFilename());
     String newProfileName = loginId + "." + ext;
     if(member.getProfile().equals(newProfileName)) {
       ImageUtil.saveProfile(dto.getProfile(), loginId);
-      return;
-    }
-    if(memberDao.updateProfile(newProfileName, loginId)==1) {
+    } else {
+      memberDao.updateProfile(newProfileName, loginId);
       ImageUtil.saveProfile(dto.getProfile(), loginId);
       ImageUtil.deleteProfile(member.getProfile());
+      return MiniShopConstants.IMAGE_URL + newProfileName;
     }
     // 업데이트 실패라면 새프사를 저장하지 않고 기존프사 유지
+    return MiniShopConstants.IMAGE_URL + member.getProfile();
   }
 }

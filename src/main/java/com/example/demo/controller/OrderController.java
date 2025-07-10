@@ -43,6 +43,7 @@ public class OrderController {
 
   @GetMapping("/api/orders")
   public ResponseEntity<List<OrderDto.Summary>> orderList(Principal principal) {
+    System.out.println(principal);
     return ResponseEntity.ok(service.orderList(principal.getName()));
   }
 

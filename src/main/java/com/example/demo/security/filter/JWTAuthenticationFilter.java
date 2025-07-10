@@ -15,14 +15,15 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
-	List<String> whitelist = Arrays.asList("/api/member", "/api/products/view");
+//	List<String> whitelist = Arrays.asList("/api/member", "/api/products/view");
 	
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
 		if(request.getMethod().equals("OPTIONS"))
 			return true;
-		String path = request.getRequestURI();
-		return whitelist.stream().anyMatch(path::startsWith);
+//		String path = request.getRequestURI();
+//		return whitelist.stream().anyMatch(path::startsWith);
+		return false;
 	}
 	
 	@Override
@@ -36,7 +37,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		String accessToken = request.getHeader("Authorization").substring(7);
-		System.out.println(accessToken);
 		try {
 			Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 			String username = (String)claims.get("username");
@@ -44,6 +44,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 			String role = (String)claims.get("role");
 			CustomUserDetails dto = new CustomUserDetails(username, password, role);
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto, password, dto.getAuthorities());
+			System.out.println(token);
 			SecurityContextHolder.getContext().setAuthentication(token);
 			filterChain.doFilter(request, response);
 		} catch(CustomJWTException e) {

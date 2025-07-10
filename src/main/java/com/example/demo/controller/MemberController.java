@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.*;
 import jakarta.validation.*;
 import lombok.*;
 import org.springframework.http.*;
+import org.springframework.security.access.annotation.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.validation.*;
 import org.springframework.validation.annotation.*;
@@ -27,7 +28,7 @@ public class MemberController {
     return ResponseEntity.ok(service.signup(dto));
   }
 
-  @PreAuthorize("isAuthenticated()")
+  @Secured("ROLE_MEMBER")
   @Operation(summary = "내 정보 보기", description = "내 정보 보기")
   @GetMapping("/api/members")
   public ResponseEntity<MemberDto.Read> readme(Principal principal) {
@@ -39,8 +40,8 @@ public class MemberController {
   @PreAuthorize("isAuthenticated()")
   @Operation(summary = "프사 변경", description = "프사를 변경")
   @PutMapping("/api/members/profile")
-  public ResponseEntity<Void> updateProfile(@Valid MemberDto.changeProfile dto, BindingResult br, Principal principal) {
-    service.updateProfile(dto, principal.getName());
-    return ResponseEntity.ok(null);
+  public ResponseEntity<String> updateProfile(@Valid MemberDto.changeProfile dto, BindingResult br, Principal principal) {
+    String imageUrl = service.updateProfile(dto, principal.getName());
+    return ResponseEntity.ok(imageUrl);
   }
 }
