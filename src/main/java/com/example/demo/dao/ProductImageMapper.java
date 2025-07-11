@@ -12,4 +12,10 @@ public interface ProductImageMapper {
 
   @Select("select '${url}'||name from product_image where product_id=#{productId}")
   List<String> findImageUrlsByProductId(int productId, String url);
+
+  @Select("select name from product_image where product_id=#{productId}")
+  List<String> findByProductId(int productId);
+
+  @Delete("delete from product_image where product_id=#{productId}")
+  int deleteByProductId(int productId);
 }

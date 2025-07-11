@@ -43,4 +43,14 @@ public class SellerProductDto {
     private String seller;
     private List<ProductImage> images;
   }
+
+  @Data
+  public static class Update {
+    @NotNull
+    private Integer id;
+    @NotEmpty
+    private String info;
+    @NotNull
+    private Integer stock;
+  }
 }

@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.product.*;
+import jakarta.validation.constraints.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.*;
@@ -18,4 +19,13 @@ public interface SellerProductMapper {
   int countBySeller(String seller);
 
   Optional<SellerProductDto.ProductDetail> findById(int productId, String url);
+
+  @Select("select seller from product where id=#{productId}")
+  Optional<String> findSellerById(Integer productId);
+
+  @Update("update product set info=#{info}, stock=#{stock} where id=#{productId}")
+  int update(SellerProductDto.Update dto);
+
+  @Delete("delete from product where id=#{productId}")
+  int deleteById(int productId);
 }

@@ -28,8 +28,8 @@
   </resultMap>
   <select id="findById" resultMap="productMap">
     select p.id, p.name, p.info, p.price, p.sales_count, p.sales_amount, p.review_count,
-           case when p.review_count=0 then 0 else p.total_rating/p.review_count end as rating,
-           p.stock, p.seller, pi.id as image_id, '${url}'||pi.name as image_name from product p join product_image pi on p.id=pi.product_id
+      case when p.review_count=0 then 0 else p.total_rating/p.review_count end as rating,
+      p.stock, p.seller, pi.id as image_id, '${url}'||pi.name as image_name from product p join product_image pi on p.id=pi.product_id
     where p.id=#{productId}
   </select>
 </mapper>

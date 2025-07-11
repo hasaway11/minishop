@@ -38,7 +38,7 @@ public class SellerProductController {
   }
 
   @PutMapping("/api/seller/products/{productId}")
-  public ResponseEntity<Void> update(@ModelAttribute @Valid ProductDto.Update dto, BindingResult br, Principal principal) {
+  public ResponseEntity<Void> update(@ModelAttribute @Valid SellerProductDto.Update dto, BindingResult br, Principal principal) {
     service.update(dto, principal.getName());
     return ResponseEntity.ok(null);
   }
