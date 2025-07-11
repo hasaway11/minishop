@@ -21,19 +21,19 @@ public class SellerProductController {
   private final SellerProductService service;
 
   @PostMapping("/api/seller/products/new")
-  public ResponseEntity<?> create(@ModelAttribute @Valid ProductDto.Create dto, BindingResult br, Principal principal) {
+  public ResponseEntity<?> create(@ModelAttribute @Valid SellerProductDto.Create dto, BindingResult br, Principal principal) {
     Product product = service.create(dto, principal.getName());
     return ResponseEntity.ok(product);
   }
 
   @GetMapping("/api/seller/products")
-  public ResponseEntity<PageResponse<ProductDto.Summary>> findAllBySeller(@RequestParam(defaultValue="1") Integer pageno, Principal principal) {
-    PageResponse<ProductDto.Summary> products = service.findBySeller(pageno, principal.getName());
+  public ResponseEntity<PageResponse<ProductDto.SellerSummary>> findAllBySeller(@RequestParam(defaultValue="1") Integer pageno, Principal principal) {
+    PageResponse<ProductDto.SellerSummary> products = service.findBySeller(pageno, principal.getName());
     return ResponseEntity.ok(products);
   }
 
   @GetMapping("/api/seller/products/{productId}")
-  public ResponseEntity<ProductDto.Read> read(@PathVariable int productId, Principal principal) {
+  public ResponseEntity<SellerProductDto.ProductDetail> read(@PathVariable int productId, Principal principal) {
     return ResponseEntity.ok(service.read(productId, principal.getName()));
   }
 

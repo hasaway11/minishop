@@ -20,15 +20,8 @@ public class ProductService {
 
   @Transactional(readOnly=true)
   public PageResponse<ProductDto.Summary> findSummaries(int pageno, String seller) {
-    List<ProductDto.Summary> products = null;
-    int totalCount = 0;
-    if("".equals(seller)) {
-      products = productDao.findAll(pageno, PAGE_SIZE, "http://localhost:8080/api/images/");
-      totalCount = productDao.count(null);
-    } else {
-      products = productDao.findAllBySeller(pageno, PAGE_SIZE, seller, "http://localhost:8080/api/images/");
-      totalCount = productDao.count(seller);
-    }
+    List<ProductDto.Summary> products = productDao.findAll(pageno, PAGE_SIZE,  seller, "http://localhost:8080/api/images/");
+    int totalCount = productDao.count(null);
     return new PageResponse<>(products, pageno, PAGE_SIZE, totalCount);
   }
 

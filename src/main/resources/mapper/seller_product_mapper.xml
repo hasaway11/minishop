@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.SellerProductMapper">
+  <select id="findAllBySeller" resultType="com.example.demo.dto.ProductDto$SellerSummary">
+    SELECT p.id as id, (select count(*) from order_item oi where oi.product_id=p.id and status='PAY' and rownum=1) as order_exist, p.name, p.price, p.sales_count, p.review_count, case when review_count=0 then 0 else total_rating/review_count end as rating,
+    '${url}'||(select pi.name from product_image pi where pi.product_id=p.id and rownum=1) as image from product p
+    <where>
+      <if test="seller != null">seller = #{seller} </if>
+    </where>
+    order by p.id offset (#{pageno}-1) * #{pagesize} rows fetch next #{pagesize} rows only
+  </select>
+
+  <resultMap id="productMap" type="com.example.demo.dto.SellerProductDto$ProductDetail">
+    <id property="id" column="id" />
+    <result property="name" column="name" />
+    <result property="info" column="info" />
+    <result property="price" column="price" />
+    <result property="salesCount" column="sales_count" />
+    <result property="salesAmount" column="sales_amount" />
+    <result property="totalRating" column="total_rating" />
+    <result property="reviewCount" column="review_count" />
+    <result property="stock" column="stock" />
+    <result property="seller" column="seller" />
+    <collection property="images" ofType="com.example.demo.entity.product.ProductImage" javaType="java.util.List">
+      <id property="imageId" column="image_id" />
+      <result property="name" column="image_name" />
+    </collection>
+  </resultMap>
+  <select id="findById" resultMap="productMap">
+    select p.id, p.name, p.info, p.price, p.sales_count, p.sales_amount, p.review_count,
+           case when p.review_count=0 then 0 else p.total_rating/p.review_count end as rating,
+           p.stock, p.seller, pi.id as image_id, '${url}'||pi.name as image_name from product p join product_image pi on p.id=pi.product_id
+    where p.id=#{productId}
+  </select>
+</mapper>

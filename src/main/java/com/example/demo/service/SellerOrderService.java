@@ -3,6 +3,7 @@ package com.example.demo.service;
 
 import com.example.demo.dao.*;
 import com.example.demo.dto.*;
+import com.example.demo.entity.order.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 
@@ -13,11 +14,12 @@ import java.util.*;
 public class SellerOrderService {
   private final SellerOrderMapper sellerOrderDao;
 
-  public List<SellerOrderDto.OrderDetail> findBySeller(String loginId) {
-    return sellerOrderDao.findBySeller(loginId, "http://localhost:8080/api/images/");
+  public List<SellerOrderDto.OrderSummary > findBySeller(String loginId) {
+    return sellerOrderDao.findBySeller(loginId);
   }
 
-  public List<SellerOrderDto.OrderDetail> updateStatus(List<SellerOrderDto.OrderItemId> list) {
-    return null;
+  public List<SellerOrderDto.OrderSummary > updateStatus(List<Integer> orderItemIds, String loginId) {
+    sellerOrderDao.updateStatus(orderItemIds, OrderStatus.SHIPPING);
+    return sellerOrderDao.findBySeller(loginId);
   }
 }

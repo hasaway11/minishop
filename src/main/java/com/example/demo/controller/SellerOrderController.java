@@ -17,13 +17,13 @@ public class SellerOrderController {
   private final SellerOrderService service;
 
   @GetMapping("/api/sellers/orders")
-  public ResponseEntity<List<SellerOrderDto.OrderDetail>> findBySeller(Principal principal) {
+  public ResponseEntity<List<SellerOrderDto.OrderSummary>> findBySeller(Principal principal) {
     return ResponseEntity.ok(service.findBySeller(principal.getName()));
   }
 
   @PutMapping("/api/sellers/orders")
-  public ResponseEntity<Void> updateStaus(@RequestBody List<SellerOrderDto.OrderItemId> list) {
-    service.updateStatus(list);
-    return ResponseEntity.ok(null);
+  public ResponseEntity<List<SellerOrderDto.OrderSummary>> update(@RequestParam List<Integer> ids, Principal principal) {
+    List<SellerOrderDto.OrderSummary> list = service.updateStatus(ids, principal.getName());
+    return ResponseEntity.ok(list);
   }
 }

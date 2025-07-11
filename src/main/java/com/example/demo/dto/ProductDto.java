@@ -10,26 +10,6 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel. PRIVATE)
 public class ProductDto {
   @Data
-  public static class Create {
-    @NotEmpty
-    private String name;
-    @NotEmpty
-    private String info;
-    @NotEmpty
-    private List<MultipartFile> images;
-    @NotNull
-    private Integer price;
-    @NotNull
-    private Integer stock;
-    @NotNull
-    private Integer category;
-
-    public Product toEntity(String seller) {
-      return new Product(0, seller, name, info, price, 0, 0, 0, 0, stock, category);
-    }
-  }
-
-  @Data
   public static class Update {
     @NotNull
     private Integer productId;
@@ -43,6 +23,18 @@ public class ProductDto {
   public static class Summary {
     private Integer id;
     private String seller;
+    private String name;
+    private String image;
+    private Integer price;
+    private Integer salesVolume;
+    private Double star;
+    private Integer reviewCount;
+  }
+
+  @Data
+  public static class SellerSummary {
+    private Integer id;
+    private boolean orderExist;
     private String name;
     private String image;
     private Integer price;

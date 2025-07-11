@@ -9,20 +9,11 @@ import java.util.*;
 
 @Mapper
 public interface ProductMapper {
-  List<ProductDto.Summary> findAllBySeller(int pageno, int pagesize, String seller, String url);
-
-  List<ProductDto.Summary> findAll(int pageno, int pagesize, String url);
-
-  @Select("select count(*) from product where seller=#{seller}")
-  int countBySeller(String seller);
+  List<ProductDto.Summary> findAll(int pageno, int pagesize, String seller, String url);
 
   int count(String seller);
 
   Optional<ProductDto.Read> findById(int id, String url);
-
-  @SelectKey(statement="select product_seq.nextval from dual", keyProperty="id", before=true, resultType=int.class)
-  @Insert("insert into product values(#{id}, #{name}, #{info}, #{price}, 0, 0, 0, 0, #{stock}, #{category})")
-  int save(Product product);
 
   int update(ProductDto.Update dto);
 
