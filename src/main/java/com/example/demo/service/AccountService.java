@@ -35,10 +35,10 @@ public class AccountService {
   @Transactional
   public boolean issueTemporaryPassword(AccountDto.PasswordReset dto) {
     Account account = accountDao.findById(dto.getUsername()).orElse(null);
-    if(account == null)
+    if(account==null || !account.getEmail().equals(dto.getEmail()))
       return false;
     String newPassword = RandomStringUtils.secure().nextAlphanumeric(10);
-    accountDao.updatePassword(dto.getUsername(), newPassword);
+    accountDao.updatePassword(dto.getUsername(), passwordEncoder.encode(newPassword));
 
     String content = "<p>아래 임시비밀번호로 로그인하세요</p>";
     content+= "<p>" + newPassword  + "</p>";

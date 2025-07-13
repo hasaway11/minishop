@@ -7,7 +7,7 @@ import java.util.*;
 
 @Mapper
 public interface MemberMapper {
-  @Insert("insert into member values(#{username}, #{birthDate}, #{profile}, #{memberLevel})")
+  @Insert("insert into member values(#{username}, #{birthDate}, #{profile}, #{memberLevel}, #{orderCount}, #{orderAmount})")
   int save(Member member);
 
   @Select("select a.*, m.* from account a join member m on a.username=m.username where m.username=#{username}")
@@ -17,5 +17,5 @@ public interface MemberMapper {
   int updateProfile(String newProfile, String username);
 
   @Update("update member set order_count=order_count+1, order_amount=order_amount+#{money} where username=#{username}")
-  int updateOrderStat(int money, String loginId);
+  int updateOrderStat(int money, String username);
 }

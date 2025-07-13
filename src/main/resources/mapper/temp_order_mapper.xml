@@ -4,8 +4,8 @@
   <insert id="saveAll">
     insert all
     <foreach collection="tempOrders" item="o">
-      INTO temp_orders (temp_id, cart_item_id, username, product_id, name, image, quantity, total_price)
-      values(#{tempId}, #{o.cartItemId}, #{o.username}, #{o.productId}, #{o.name}, #{o.image}, #{o.quantity}, #{o.totalPrice})
+      INTO temp_orders (temp_id, cart_item_id, username, product_id, name, image, quantity, total_price, seller, invalid_at)
+      values(#{tempId}, #{o.cartItemId}, #{o.username}, #{o.productId}, #{o.name}, #{o.image}, #{o.quantity}, #{o.totalPrice}, #{o.seller}, #{o.invalidAt})
     </foreach>
     SELECT * FROM dual
   </insert>

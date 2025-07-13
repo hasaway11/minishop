@@ -108,7 +108,8 @@ create table temp_orders (
   quantity number(2),
   total_price number(7),
   seller varchar2(10 char),
-  constraint temp_orders_pk primary key(cart_id)
+  invalid_at date,
+  constraint temp_orders_pk primary key(cart_item_id, temp_id)
 );
 
 create sequence temp_orders_seq;

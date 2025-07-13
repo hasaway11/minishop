@@ -14,8 +14,8 @@ public class ProductController {
   private final ProductService service;
 
   @GetMapping("/api/products")
-  public ResponseEntity<PageResponse<ProductDto.Summary>> findSummaries(@RequestParam(defaultValue="1") int pageno, @RequestParam String seller) {
-    return ResponseEntity.ok(service.findSummaries(pageno, seller));
+  public ResponseEntity<PageResponse<ProductDto.Summary>> findAll(@RequestParam(defaultValue="1") int pageno, @RequestParam(required=false) String seller) {
+    return ResponseEntity.ok(service.findAll(pageno, seller));
   }
 
   @GetMapping("/api/products/{id}")

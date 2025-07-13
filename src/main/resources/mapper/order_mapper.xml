@@ -9,6 +9,6 @@
   </select>
 
   <select id="findById" resultType="com.example.demo.dto.OrderDto$OrderDetail">
-    select address, order_at, order_total_price from orders
+    select address, order_at, order_total_price from orders where id=#{id}
   </select>
 </mapper>

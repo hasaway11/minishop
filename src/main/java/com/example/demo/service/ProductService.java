@@ -8,6 +8,7 @@ import com.example.demo.util.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -19,7 +20,7 @@ public class ProductService {
   private final int PAGE_SIZE = 12;
 
   @Transactional(readOnly=true)
-  public PageResponse<ProductDto.Summary> findSummaries(int pageno, String seller) {
+  public PageResponse<ProductDto.Summary> findAll(int pageno, String seller) {
     List<ProductDto.Summary> products = productDao.findAll(pageno, PAGE_SIZE,  seller, "http://localhost:8080/api/images/");
     int totalCount = productDao.count(null);
     return new PageResponse<>(products, pageno, PAGE_SIZE, totalCount);

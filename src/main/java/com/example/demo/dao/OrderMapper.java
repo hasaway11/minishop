@@ -9,7 +9,6 @@ import java.util.*;
 @Mapper
 public interface OrderMapper {
   @SelectKey(statement="select orders_seq.nextval from dual", keyProperty="id", before=true, resultType=int.class)
-
   @Insert("insert into orders(id, orderer, order_at, zipcode, address, order_total_price) values(#{id}, #{orderer}, #{orderAt},  #{zipcode}, #{address}, #{orderTotalPrice})")
   int save(Order order);
 

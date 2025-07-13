@@ -23,7 +23,7 @@ public interface SellerProductMapper {
   @Select("select seller from product where id=#{productId}")
   Optional<String> findSellerById(Integer productId);
 
-  @Update("update product set info=#{info}, stock=#{stock} where id=#{productId}")
+  @Update("update product set info=#{info}, stock=#{stock} where id=#{id}")
   int update(SellerProductDto.Update dto);
 
   @Delete("delete from product where id=#{productId}")

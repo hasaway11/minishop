@@ -4,10 +4,14 @@ import com.example.demo.dao.*;
 import com.example.demo.dto.*;
 import com.example.demo.entity.order.*;
 import com.example.demo.exception.*;
+import com.example.demo.util.*;
 import lombok.*;
+import org.springframework.cglib.core.*;
+import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
+import java.time.*;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -25,13 +29,18 @@ public class OrderService {
     // 장바구니에서 선택한 상품들의 임시주문엔티티를 읽어온다
     // 자신의 주문상품이 아닌 상품이 섞여 있다면 오류 처리
     // 임시주문엔티티들을 저장한 다음 임시주문번호를 리턴
-    List<TempOrder> tempOrders =  cartDao.findSelectedCartItems(selectedCartItemIds, "http://localhost:8080/api/images/");
+    List<TempOrder> tempOrders =  cartDao.findSelectedCartItems(selectedCartItemIds, MiniShopConstants.IMAGE_URL);
     boolean containsItemNotOwnedByUser = tempOrders.stream().anyMatch(item->!item.getUsername().equals(loginId));
     if (containsItemNotOwnedByUser)
       throw new JobFailException("잘못된 작업입니다.");
     int newTempId = tempOrderDao.findNextTempId();
     tempOrderDao.saveAll(tempOrders, newTempId);
     return newTempId;
+  }
+
+//  @Scheduled(cron="0 0 0/1 1/1 * ?")
+  public void remove() {
+    tempOrderDao.deleteExpiredOrders(LocalDateTime.now());
   }
 
   // 임시 주문 엔티티와 총 주문 가격을 리턴
@@ -48,7 +57,7 @@ public class OrderService {
   }
 
   @Transactional
-  public void order(OrderDto.OrderRequest dto, String loginId) {
+  public int order(OrderDto.OrderRequest dto, String loginId) {
     List<TempOrder> tempOrders = tempOrderDao.findByTempId(dto.getId());
     if(tempOrders.isEmpty())
       throw new JobFailException("주문 정보를 찾을 수 없습니다");
@@ -70,6 +79,7 @@ public class OrderService {
     tempOrderDao.deleteByTempId(dto.getId());
     cartDao.deleteAll(cartIds);
     memberDao.updateOrderStat(orderTotalPrice, loginId);
+    return order.getId();
   }
 
   @Transactional(readOnly = true)

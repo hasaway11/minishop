@@ -36,9 +36,10 @@ public class OrderController {
 
   // 주문 내용 확인 후 주문
   @PostMapping("/api/orders")
-  public ResponseEntity<Void> order(@Valid OrderDto.OrderRequest dto, BindingResult br, Principal principal) {
-    service.order(dto, principal.getName());
-    return ResponseEntity.ok(null);
+  public ResponseEntity<Integer> order(@Valid OrderDto.OrderRequest dto, BindingResult br, Principal principal) {
+    int orderId = service.order(dto, principal.getName());
+    System.out.println(orderId);
+    return ResponseEntity.ok(orderId);
   }
 
   @GetMapping("/api/orders")

@@ -20,8 +20,6 @@ public class ImageUtil {
       return DEFAULT_PROFILE;
     String ext = FilenameUtils.getExtension(profile.getOriginalFilename());
     String profileName = username + "." + ext;
-    System.out.println("프로필 사진 :" + profileName);
-    System.out.println(profile.getOriginalFilename());
     try {
       File target = new File(PROFILE_FOLDER, profileName);
       profile.transferTo(target);

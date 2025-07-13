@@ -3,6 +3,7 @@ package com.example.demo.dao;
 import com.example.demo.entity.order.*;
 import org.apache.ibatis.annotations.*;
 
+import java.time.*;
 import java.util.*;
 
 @Mapper
@@ -16,4 +17,7 @@ public interface TempOrderMapper {
 
   @Select("select temp_orders_seq.nextval from dual")
   int findNextTempId();
+
+  @Delete("delete from temp_orders where invalid_at<#{now}")
+  int deleteExpiredOrders(LocalDateTime now);
 }

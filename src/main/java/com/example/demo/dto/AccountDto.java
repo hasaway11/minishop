@@ -24,6 +24,9 @@ public class AccountDto {
     @NotEmpty(message="아이디는 필수입력입니다")
     @Pattern(regexp="^[a-z0-9]{6,10}$", message="아이디는 소문자와 숫자 6~10자입니다")
     private String username;
+    @NotEmpty(message="이메일은 필수입력입니다")
+    @Email(message="잘못된 이메일입니다")
+    private String email;
   }
 
   @Data

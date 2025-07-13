@@ -1,0 +1,64 @@
+Auth
+1. 토큰 유효성 검사 (/api/check)
+2. 토큰 갱신 (/api/refresh)
+
+Account
+3. 아이디 사용여부 확인 (/api/accounts/check-username)
+4. 아이디 찾기 (/api/accounts/find-username)
+5. 임시비밀번호 발급 (/api/accounts/reset-password)
+6. 비밀번호 확인 (/api/accounts/check-password)
+7. 비밀번호 변경 (/api/accounts/password)
+
+Member
+8. 일반회원 가입 (/api/members/new)
+9. 내 정보 보기 (/api/members)
+10. 프사 변경 (/api/members/profile)
+
+Seller
+11. 가입 확인코드 신청 (/api/email-verification/request)
+12. 확인코드 검증 (/api/email-verification/check)
+13. 셀러회원 가입 (/api/sellers/new)
+14. 판매자 정보 보기 (/api/sellers)
+
+Prdouct - Member
+15. 상품 목록 (/api/products)
+16. 상품 정보 (/api/products/{id})
+
+Product - Seller
+17. 상품 등록 (/api/seller/products/new)
+18. 판매자가 등록한 상품 목록 (/api/seller/products)
+19. 상품 정보 (/api/seller/products/{productId})
+20. 상품 업데이트 (/api/seller/products)
+21. 상품 삭제 (/api/seller/products/{productId})
+
+Category
+22. 전체 카테고리 (/api/categories)
+23. 선택한 카테고리 (/api/categories/minor)
+
+Image
+24. 이미지들 추가 (/api/images/{imageName})
+
+Cart
+25. 장바구니 담기 (POST /api/carts/{id})
+26. 장바구니 읽기 (GET /api/carts)
+27. 상품 개수 증가 (PUT /api/carts/{id}/inc)
+28. 상품 개수 감소 (PUT /api/carts/{id}/dec)
+29. 장바구니에서 상품 삭제 (DELETE /api/carts/{id})
+30. 장바구니에서 상품들 삭제 (DELETE /api/carts)
+
+Order - Member
+31. 주문상품 선택 (POST /api/orders/prepare)
+32. 주문 체크아웃 (GET /api/orders/check)
+33. 주문 (POST /api/orders)
+34. 주문 목록 (GET /api/orders)
+35. 주문 상세 (GET /api/orders/{orderId})
+
+Order - Seller
+36. 접수 주문 목록 (GET /api/sellers/orders)
+37. 주문상태 변경 (PUT /api/sellers/orders)
+
+Review
+38. 리뷰작성가능한 주문 목록 (GET /reviews/product)
+39. 리뷰 작성 (POST /reviews/new)
+40. /api/reviews/{id}
+41. 자신의 리뷰 보기 (GET /reviews)

@@ -37,6 +37,7 @@ public class MemberService {
     return memberDao.findById(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다")).toRead();
   }
 
+  @Transactional
   public String updateProfile(MemberDto.changeProfile dto, String loginId) {
     Member member = memberDao.findById(loginId).orElseThrow(()->new EntityNotFoundException("사용자를 찾을 수 없습니다"));
     MultipartFile file = dto.getProfile();
